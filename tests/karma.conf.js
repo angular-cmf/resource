@@ -13,6 +13,8 @@ module.exports = function(config){
             'src/app.config.js',
             'src/*.js',
 
+            'tests/fakeApi/*.js',
+
             'tests/unit/*.js'
         ],
 
