@@ -2,15 +2,15 @@
 
 [![Build Status](https://travis-ci.org/ElectricMaxxx/symfony-cmf-resource.svg)](https://travis-ci.org/ElectricMaxxx/symfony-cmf-resource)
 
-This bundle is part of the [Symfony Content Management Framework (CMF)](http://cmf.symfony.com/)
+This module is part of the [Symfony Content Management Framework (CMF)](http://cmf.symfony.com/)
 and licensed under the [MIT License](LICENSE).
 
 It provides a client side module for handling cmf resources.
 
 ## Requirements
 
-* Node.JS >= 0.10
-* npm
+* AngularJS 1.3.*
+* bower
 * See also the `dependencies` section of [package.json](package.json) and [bower.json](bower.json)
 
 ## Documentation
