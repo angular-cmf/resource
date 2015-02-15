@@ -7,6 +7,10 @@
       "type": "MIT"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ElectricMaxxx/symfony-cmf-resource.git"
+  },
   "engines": {
     "node": ">= 0.10.12"
   },
@@ -17,18 +21,18 @@
     "jshint": "latest",
     "karma": "^0.12.16",
     "karma-cli": "latest",
-    "karma-chrome-launcher": "^0.1.4",
+    "karma-firefox-launcher": "~0.1",
     "karma-story-reporter": "~0.3.1",
-    "karma-jasmine": "^0.1.5",
-    "phantomjs": "~1.9.15",
-    "karma-phantomjs-launcher": "~0.1.4"
+    "karma-jasmine": "^0.1.5"
   },
   "scripts": {
     "lint": "jshint src/**/*.js",
-    "test": "karma start tests/karma.conf.js --reporters progress,story --browsers Chrome",
+    "test": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox",
+    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox --single-run",
 
     "postinstall": "bower install",
     "prebuild": "npm run test # also runs npm run pretest",
+    "pretest:ci": "npm install; npm run lint",
     "pretest": "npm install; npm run lint"
   }
 }

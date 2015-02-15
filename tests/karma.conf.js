@@ -20,13 +20,12 @@ module.exports = function(config){
 
         frameworks: ['jasmine'],
 
-        browsers: ['PhantomJS', 'Chrome'],
+        browsers: ['PhantomJS', 'Firefox'],
 
         plugins : [
-            'karma-chrome-launcher',
+            'karma-firefox-launcher',
             'karma-story-reporter',
-            'karma-jasmine',
-            'karma-phantomjs-launcher'
+            'karma-jasmine'
         ],
 
         reporters: ['story'],
