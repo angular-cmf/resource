@@ -23,17 +23,30 @@
     "karma-cli": "latest",
     "karma-firefox-launcher": "~0.1",
     "karma-story-reporter": "~0.3.1",
-    "karma-jasmine": "^0.1.5"
+    "karma-jasmine": "^0.1.5",
+    "browserify": "^6.3.2",
+    "uglify-js":"latest"
+  },
+  "config": {
+    "browsers": "Firefox"
   },
   "scripts": {
-    "lint": "jshint src/**/*.js",
-    "test": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox",
-    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox --single-run",
+    "clean":"rm dist/*.*",
+    "lint": "jshint src/*.js",
 
     "postinstall": "bower install",
-    "prebuild": "npm run test # also runs npm run pretest",
-    "pretest:ci": "npm install; npm run lint",
-    "pretest": "npm install; npm run lint"
+
+    "pretest": "npm install &&  npm run lint",
+    "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
+    "pretest:ci": "npm install && npm run lint",
+    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox --single-run",
+
+    "build:scripts:concatenate": "browserify src/*.js > dist/symfony-cmf-resource.js",
+    "build:scripts:minify":"uglifyjs dist/symfony-cmf-resource.js > dist/symfony-cmf-resource.min.js --source-map dist/symfony-cmf-resource.js.map",
+    "prebuild": "npm run test  && npm run clean",
+    "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
+    "prebuild:ci": "npm run test:ci  && npm run clean",
+    "build:ci": "npm run build:scripts:concatenate && npm run build:scripts:minify"
   }
 }
 
