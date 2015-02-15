@@ -1,0 +1,35 @@
+{
+  "name": "symfony-cmf-resource",
+  "version": "0.0.1",
+  "author": "Maximilian Berghoff <maximilian.berghoff@gmx.de>",
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.10.12"
+  },
+  "dependencies":{
+    "bower": "latest"
+  },
+  "devDependencies": {
+    "jshint": "latest",
+    "karma": "^0.12.16",
+    "karma-cli": "latest",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-story-reporter": "~0.3.1",
+    "karma-jasmine": "^0.1.5",
+    "phantomjs": "~1.9.15",
+    "karma-phantomjs-launcher": "~0.1.4"
+  },
+  "scripts": {
+    "lint": "jshint src/**/*.js",
+    "test": "karma start tests/karma.conf.js --reporters progress,story --browsers Chrome",
+
+    "postinstall": "bower install",
+    "prebuild": "npm run test # also runs npm run pretest",
+    "pretest": "npm install; npm run lint"
+  }
+}
+
