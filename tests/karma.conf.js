@@ -11,16 +11,16 @@ module.exports = function(config){
 
             'src/app.js',
             'src/app.config.js',
-            'src/**/*.js',
+            'src/*.js',
 
-            'tests/unit/**/*.js'
+            'tests/unit/*.js'
         ],
 
         autoWatch : true,
 
         frameworks: ['jasmine'],
 
-        browsers: ['PhantomJS', 'Firefox'],
+        browsers: ['Firefox'],
 
         plugins : [
             'karma-firefox-launcher',
