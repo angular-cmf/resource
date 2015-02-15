@@ -20,7 +20,7 @@ describe('ResourceService', function() {
 
         beforeEach(function() {
             http.whenGET('api/phpcr_repo/foo').respond(200, truthy_content);
-            http.whenGET('api/phpcr_repo/fo').respond(404);
+            http.whenGET('api/phpcr_repo/fo').respond(404, {"message":"Oops something went wrong."});
         });
 
         afterEach(function() {
@@ -63,7 +63,7 @@ describe('ResourceService', function() {
             };
 
             var failTest = function(error) {
-                expect(error).toBeDefined();
+                expect(error.data.message).toBe("Oops something went wrong.");
             };
 
             service

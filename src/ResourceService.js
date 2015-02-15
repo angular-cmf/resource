@@ -1,7 +1,7 @@
 angular.module('symfony-cmf-resource')
     .factory('ResourceService', ['Resource', 'Restangular', '$q', function(Resource, Restangular, $q) {
         var ResourceService = {};
-        ResourceService.ResoucesList = []
+        ResourceService.ResoucesList = [];
         ResourceService.$get = angular.noop;
 
         var removeTrailingSlash = function(str) {
