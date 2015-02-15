@@ -20,6 +20,7 @@ describe('ResourceService', function() {
 
         beforeEach(function() {
             http.whenGET('api/phpcr_repo/foo').respond(200, truthy_content);
+            http.whenGET('api/phpcr_repo/fo').respond(404);
         });
 
         afterEach(function() {
@@ -38,6 +39,36 @@ describe('ResourceService', function() {
 
             service.find(null, '/foo')
                 .then(testResource)
+                .catch(failTest);
+        });
+
+        it('should increase the count of the available resources by one (when no list was there)', function() {
+            var testResourcesList = function() {
+                expect(service.ResoucesList.length).toBe(1);
+            };
+
+            var failTest = function(error) {
+                expect(error).toBeUndefined();
+            };
+
+            service
+                .find(null, '/foo')
+                .then(testResourcesList)
+                .catch(failTest);
+        });
+
+        it('should give an error when the resource does not exists', function() {
+            var testResourcesList = function(resource) {
+                expect(resource).toBeUndefined();
+            };
+
+            var failTest = function(error) {
+                expect(error).toBeDefined();
+            };
+
+            service
+                .find(null, '/fo')
+                .then(testResourcesList)
                 .catch(failTest);
         });
     });

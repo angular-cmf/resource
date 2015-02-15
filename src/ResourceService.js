@@ -1,6 +1,7 @@
 angular.module('symfony-cmf-resource')
     .factory('ResourceService', ['Resource', 'Restangular', '$q', function(Resource, Restangular, $q) {
-        var ResourceService = {}, ResoucesList = [];
+        var ResourceService = {};
+        ResourceService.ResoucesList = []
         ResourceService.$get = angular.noop;
 
         var removeTrailingSlash = function(str) {
@@ -15,7 +16,7 @@ angular.module('symfony-cmf-resource')
             var promise = Resource.one(removeTrailingSlash(id)).get();
 
             promise.then(function(resourceData) {
-                ResoucesList.push(resourceData);
+                ResourceService.ResoucesList.push(resourceData);
             });
 
             return promise;
