@@ -39,7 +39,7 @@
     "pretest": "npm install &&  npm run lint",
     "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
     "pretest:ci": "npm install && npm run lint",
-    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox --single-run",
+    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
 
     "build:scripts:concatenate": "browserify src/*.js > dist/symfony-cmf-resource.js",
     "build:scripts:minify":"uglifyjs dist/symfony-cmf-resource.js > dist/symfony-cmf-resource.min.js --source-map dist/symfony-cmf-resource.js.map",
