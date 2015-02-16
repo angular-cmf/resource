@@ -17,7 +17,7 @@ It provides a client side module for handling cmf resources.
 
 For the install guide and reference, see:
 
-* [Symfony-CMF-Resource(JS) documentation](http://symfony.com/doc/master/cmf/modules/symfony-cmf-resource)
+* [Symfony-CMF-Resource(JS) documentation](http://symfony.com/doc/master/cmf/modules/symfony-cmf-resource) (TODO)
 
 See also:
 
@@ -35,9 +35,5 @@ Pull requests are welcome. Please see our
 [CONTRIBUTING](https://github.com/symfony-cmf/symfony-cmf/blob/master/CONTRIBUTING.md)
 guide.
 
-Unit and/or functional tests exist for this bundle. See the
-[Testing documentation](http://symfony.com/doc/master/cmf/components/testing.html)
-for a guide to running the tests.
-
 Thanks to
-[everyone who has contributed](https://github.com/symfony-cmf/SeoBundle/contributors) already.
+[everyone who has contributed](https://github.com/ElectricMaxxx/symfony-cmf-resource/contributors) already.
