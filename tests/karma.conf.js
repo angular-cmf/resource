@@ -1,4 +1,6 @@
 module.exports = function(config){
+    'use strict';
+
     config.set({
 
         basePath : '../',
@@ -20,14 +22,15 @@ module.exports = function(config){
 
         autoWatch : true,
 
-        frameworks: ['jasmine'],
+        frameworks: ['mocha', 'sinon-chai'],
 
         browsers: ['Firefox'],
 
         plugins : [
             'karma-firefox-launcher',
             'karma-story-reporter',
-            'karma-jasmine'
+            'karma-sinon-chai',
+            'karma-mocha'
         ],
 
         reporters: ['story'],

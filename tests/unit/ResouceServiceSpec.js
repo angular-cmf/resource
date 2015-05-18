@@ -1,6 +1,6 @@
-"use strict";
-
 describe('ResourceService', function() {
+    'use strict';
+
     var service, http;
 
     beforeEach(function() {
@@ -13,10 +13,10 @@ describe('ResourceService', function() {
     });
 
     it('should be defined', function () {
-        expect(service).not.toBeNull();
+        expect(service).not.to.be.null();
     });
 
-    describe('Find resource', function() {
+    describe('Find resource on fakeApi', function() {
 
         beforeEach(function() {
             http.whenGET('api/phpcr_repo/foo').respond(200, truthy_content);
@@ -29,12 +29,12 @@ describe('ResourceService', function() {
 
         it('should pass the complete resource on success callback', function() {
             var testResource = function(resource) {
-                expect(resource.payload.title).toBe('Article 1');
-                expect(resource.payload.body).toBe('This is my article');
+                expect(resource.payload.title).to.equal('Article 1');
+                expect(resource.payload.body).to.equal('This is my article');
             };
 
             var failTest = function(error) {
-                expect(error).toBeUndefined();
+                expect(error).to.be('undefined');
             };
 
             service.find(null, '/foo')
@@ -44,7 +44,7 @@ describe('ResourceService', function() {
 
         it('should increase the count of the available resources by one (when no list was there)', function() {
             var testResourcesList = function() {
-                expect(service.ResoucesList.length).toBe(1);
+                expect(service.ResoucesList.length).to.equal(1);
             };
 
             var failTest = function(error) {
@@ -59,11 +59,11 @@ describe('ResourceService', function() {
 
         it('should give an error when the resource does not exists', function() {
             var testResourcesList = function(resource) {
-                expect(resource).toBeUndefined();
+                expect(resource).to.be('undefined');
             };
 
             var failTest = function(error) {
-                expect(error.data.message).toBe("Oops something went wrong.");
+                expect(error.data.message).to.equal("Oops something went wrong.");
             };
 
             service

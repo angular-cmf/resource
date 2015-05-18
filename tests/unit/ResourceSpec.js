@@ -17,6 +17,6 @@ describe('Resource', function() {
     }));
 
     it('should be defined', function () {
-        expect(Resource).not.toBeNull();
+        expect(Resource).not.to.be.null();
     });
 });
