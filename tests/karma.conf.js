@@ -3,9 +3,9 @@ module.exports = function(config){
 
     config.set({
 
-        basePath : '../',
+        basePath: '../',
 
-        files : [
+        files: [
             'bower_components/angular/angular.js',
             'bower_components/angular-mocks/angular-mocks.js',
             'bower_components/lodash/dist/lodash.min.js',
@@ -20,13 +20,13 @@ module.exports = function(config){
             'tests/unit/*.js'
         ],
 
-        autoWatch : true,
+        autoWatch: true,
 
         frameworks: ['mocha', 'sinon-chai'],
 
         browsers: ['Firefox'],
 
-        plugins : [
+        plugins: [
             'karma-firefox-launcher',
             'karma-story-reporter',
             'karma-sinon-chai',
@@ -35,7 +35,7 @@ module.exports = function(config){
 
         reporters: ['story'],
 
-        junitReporter : {
+        junitReporter: {
             outputFile: 'test_out/unit.xml',
             suite: 'unit'
         }
