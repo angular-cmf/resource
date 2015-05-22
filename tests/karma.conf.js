@@ -17,7 +17,8 @@ module.exports = function(config){
 
             'tests/fakeApi/*.js',
 
-            'tests/unit/*.js'
+            'tests/unit/*.js',
+            'tests/integration/*.js'
         ],
 
         autoWatch: true,
