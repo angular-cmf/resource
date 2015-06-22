@@ -23,15 +23,14 @@ module.exports = function(config){
 
         autoWatch: true,
 
-        frameworks: ['mocha', 'sinon-chai'],
+        frameworks: ['jasmine'],
 
         browsers: ['Firefox'],
 
         plugins: [
             'karma-firefox-launcher',
             'karma-story-reporter',
-            'karma-sinon-chai',
-            'karma-mocha'
+            'karma-jasmine'
         ],
 
         reporters: ['story'],

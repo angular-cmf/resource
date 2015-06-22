@@ -7,16 +7,7 @@ describe('ResourceService', function() {
 
     beforeEach(function () {
         module(function ($provide) {
-            Resource = {
-                post: function () {},
-                put: function () {},
-                getList: function () {},
-                one: function () {
-                    return {
-                        get: function () {}
-                    };
-                }
-            };
+            Resource = jasmine.createSpyObj('Resource', ['get', 'post', 'put', 'getList', 'one']);
 
             $provide.value('Resource', Resource);
             $provide.value('Restangular', {});
@@ -30,15 +21,14 @@ describe('ResourceService', function() {
     });
 
     it('should not be null', function () {
-        expect(service).not.to.be.null();
+        expect(service).not.toBeNull();
     });
 
     describe("find single resource", function () {
         beforeEach(function () {
             deferred = $q.defer();
 
-            // mock the answers of Resource.one().get()
-            sinon.stub(Resource, 'one').returns({
+            Resource.one.and.returnValue({
                 get: function () {
                     return deferred.promise;
                 }
@@ -50,7 +40,7 @@ describe('ResourceService', function() {
 
         it('should serve the resolved data', function () {
             promise.then(function (value) {
-                expect(value.id).to.equal('some/id');
+                expect(value.id).toBe('some/id');
             });
 
             deferred.resolve({id: 'some/id'});
@@ -59,8 +49,8 @@ describe('ResourceService', function() {
 
         it('should add an entry in the cached list of resources', function () {
             promise.then(function (value) {
-                _.values(service.ResourcesList).length.should.to.be.equal(1);
-                service.ResourcesList['some/id'].should.not.equal(null);
+                expect(_.values(service.ResourcesList).length).toBe(1);
+                expect(service.ResourcesList['some/id']).not.toBe(null);
             });
 
             deferred.resolve({id: 'some/id'});
@@ -71,7 +61,7 @@ describe('ResourceService', function() {
 
             service.ResourcesList['some/id'] = {id: 'some/id', name: 'Some name'};
             promise.then(function (resource) {
-                resource.name.should.equal('Some name');
+                expect(resource.name).toBe('Some name');
             });
 
             deferred.resolve({id: 'some/id'});
@@ -88,13 +78,12 @@ describe('ResourceService', function() {
                 {id: 'some/id'},
                 {id: 'some-other/id'}
             ];
-
-            sinon.stub(Resource, 'getList').returns(deferred.promise);
+            Resource.getList.and.returnValue(deferred.promise);
         });
 
         it('should increase the number of cached resources by the amount of entries in the list', function () {
             service.getAll().then(function () {
-                _.values(service.ResourcesList).length.should.be.equal(resourcesList.length);
+                expect(_.values(service.ResourcesList).length).toEqual(resourcesList.length);
             });
 
             deferred.resolve(resourcesList);
@@ -103,7 +92,7 @@ describe('ResourceService', function() {
 
         it('should return promise with the current list of resources', function () {
             service.getAll().then(function (list) {
-                list.should.be.equal(service.ResourcesList);
+                expect(list).toEqual(service.ResourcesList);
             });
 
             deferred.resolve(resourcesList);
@@ -118,8 +107,8 @@ describe('ResourceService', function() {
             ];
 
             service.getAll().then(function (list) {
-                _.values(service.ResourcesList).length.should.equal(2);
-                service.ResourcesList['some/id'].name.should.equal('Some resource');
+                expect(_.values(service.ResourcesList).length).toEqual(2);
+                expect(service.ResourcesList['some/id'].name).toEqual('Some resource');
             });
 
             deferred.resolve(resourcesList);
