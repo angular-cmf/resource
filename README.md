@@ -1,6 +1,6 @@
 # Angular CMF resource module
 
-[![Build Status](https://travis-ci.org/ElectricMaxxx/symfony-cmf-resource.svg)](https://travis-ci.org/ElectricMaxxx/symfony-cmf-resource)
+[![Build Status](https://travis-ci.org/angular-cmf/resource.svg)](https://travis-ci.org/angular-cmf/resource)
 
 This module is part of the [Symfony Content Management Framework (CMF)](http://cmf.symfony.com/)
 and licensed under the [MIT License](LICENSE).
@@ -36,4 +36,4 @@ Pull requests are welcome. Please see our
 guide.
 
 Thanks to
-[everyone who has contributed](https://github.com/ElectricMaxxx/symfony-cmf-resource/contributors) already.
+[everyone who has contributed](https://github.com/angular-cmf/resource/contributors) already.

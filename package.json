@@ -1,5 +1,5 @@
 {
-  "name": "symfony-cmf-resource",
+  "name": "angular-cmf-resource",
   "version": "0.0.1",
   "author": "Maximilian Berghoff <maximilian.berghoff@gmx.de>",
   "licenses": [
@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:ElectricMaxxx/symfony-cmf-resource.git"
+    "url": "git@github.com:angular-cmf/resource.git"
   },
   "engines": {
     "node": ">= 0.10.12"
@@ -40,8 +40,8 @@
     "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
-    "build:scripts:concatenate": "browserify src/*.js > dist/symfony-cmf-resource.js",
-    "build:scripts:minify": "uglifyjs dist/symfony-cmf-resource.js > dist/symfony-cmf-resource.min.js --source-map dist/symfony-cmf-resource.js.map",
+    "build:scripts:concatenate": "browserify src/*.js > dist/angular-cmf-resource.js",
+    "build:scripts:minify": "uglifyjs dist/angular-cmf-resource.js > dist/angular-cmf-resource.min.js --source-map dist/angular-cmf-resource.js.map",
     "prebuild": "npm run test  && npm run clean",
     "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
     "prebuild:ci": "npm run test:ci  && npm run clean",
