@@ -1,9 +1,11 @@
 module.exports = function(config){
+    'use strict';
+
     config.set({
 
-        basePath : '../',
+        basePath: '../',
 
-        files : [
+        files: [
             'bower_components/angular/angular.js',
             'bower_components/angular-mocks/angular-mocks.js',
             'bower_components/lodash/dist/lodash.min.js',
@@ -13,16 +15,19 @@ module.exports = function(config){
             'src/app.config.js',
             'src/*.js',
 
-            'tests/unit/*.js'
+            'tests/fakeApi/*.js',
+
+            'tests/unit/*.js',
+            'tests/integration/*.js'
         ],
 
-        autoWatch : true,
+        autoWatch: true,
 
         frameworks: ['jasmine'],
 
         browsers: ['Firefox'],
 
-        plugins : [
+        plugins: [
             'karma-firefox-launcher',
             'karma-story-reporter',
             'karma-jasmine'
@@ -30,7 +35,7 @@ module.exports = function(config){
 
         reporters: ['story'],
 
-        junitReporter : {
+        junitReporter: {
             outputFile: 'test_out/unit.xml',
             suite: 'unit'
         }

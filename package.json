@@ -14,39 +14,37 @@
   "engines": {
     "node": ">= 0.10.12"
   },
-  "dependencies":{
+  "dependencies": {
     "bower": "latest"
   },
   "devDependencies": {
-    "jshint": "latest",
-    "karma": "^0.12.16",
-    "karma-cli": "latest",
-    "karma-firefox-launcher": "~0.1",
-    "karma-story-reporter": "~0.3.1",
-    "karma-jasmine": "^0.1.5",
     "browserify": "^6.3.2",
-    "uglify-js":"latest"
+    "jshint": "latest",
+    "karma": "~0.12.0",
+    "karma-cli": "latest",
+    "karma-firefox-launcher": "~0.1.6",
+    "karma-html-reporter": "~0.2.6",
+    "karma-jasmine": "~0.2.0",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-story-reporter": "~0.3.1",
+    "uglify-js": "latest"
   },
   "config": {
     "browsers": "Firefox"
   },
   "scripts": {
-    "clean":"rm dist/*.*",
+    "clean": "rm dist/*.*",
     "lint": "jshint src/*.js",
-
     "postinstall": "bower install",
-
     "pretest": "npm install &&  npm run lint",
     "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
     "pretest:ci": "npm install && npm run lint",
-    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers Firefox --single-run",
-
+    "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
     "build:scripts:concatenate": "browserify src/*.js > dist/symfony-cmf-resource.js",
-    "build:scripts:minify":"uglifyjs dist/symfony-cmf-resource.js > dist/symfony-cmf-resource.min.js --source-map dist/symfony-cmf-resource.js.map",
+    "build:scripts:minify": "uglifyjs dist/symfony-cmf-resource.js > dist/symfony-cmf-resource.min.js --source-map dist/symfony-cmf-resource.js.map",
     "prebuild": "npm run test  && npm run clean",
     "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
     "prebuild:ci": "npm run test:ci  && npm run clean",
     "build:ci": "npm run build:scripts:concatenate && npm run build:scripts:minify"
   }
 }
-
