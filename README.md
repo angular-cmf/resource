@@ -1,4 +1,4 @@
-# Symfony CMF resource module
+# Angular CMF resource module
 
 [![Build Status](https://travis-ci.org/ElectricMaxxx/symfony-cmf-resource.svg)](https://travis-ci.org/ElectricMaxxx/symfony-cmf-resource)
 
