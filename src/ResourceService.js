@@ -71,12 +71,12 @@ angular.module('angular-cmf-resource')
                 } else {
                     _.assign(ResourceService.ResourcesList[resource.id], resource);
                 }
-            };
+            }
 
             function addResourceToLocalList(resource) {
                 resource.pendingUuid = guid();
                 ResourceService.ResourcesList[resource.pendingUuid] = resource;
-            };
+            }
 
             function guid() {
                 function s4() {
