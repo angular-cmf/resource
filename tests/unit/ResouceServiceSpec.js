@@ -115,4 +115,35 @@ describe('ResourceService', function() {
             $rootscope.$digest();
         });
     });
+
+    describe("persist a resource", function () {
+        describe('create new', function () {
+            var promise;
+
+            beforeEach(function () {
+                promise = service.persist({name: 'some name'});
+            });
+
+            it('should add created resource to the cached list', function () {
+                promise.then(function () {
+                    expect(_.size(service.ResourcesList)).toBe(1);
+                });
+                $rootscope.$digest();
+            });
+
+            it('should create a pending uuid on the resource', function () {
+                promise.then(function (data) {
+                    expect(data.pendingUuid).not.toBeNull();
+                });
+                $rootscope.$digest();
+            });
+
+            it('should set the changed flag to true at all', function () {
+                promise.then(function (data) {
+                    expect(data.changed).toBe(true);
+                });
+                $rootscope.$digest();
+            });
+        });
+    });
 });
