@@ -1,2 +1,2 @@
 
-angular.module('symfony-cmf-resource', ['symfony-cmf-resource.config']);
+angular.module('angular-cmf-resource', ['angular-cmf-resource.config']);

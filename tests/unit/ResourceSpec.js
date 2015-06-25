@@ -1,7 +1,7 @@
 describe('Resource', function() {
     var Resource = {}, Restangular = {};
 
-    beforeEach(module('symfony-cmf-resource', function ($provide) {
+    beforeEach(module('angular-cmf-resource', function ($provide) {
         Restangular = {
             service: function(value) {
                 return 'something';

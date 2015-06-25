@@ -1,5 +1,5 @@
 
-angular.module('symfony-cmf-resource')
+angular.module('angular-cmf-resource')
     .factory('ResourceService', [
         'Resource',
         'Restangular',
@@ -38,6 +38,23 @@ angular.module('symfony-cmf-resource')
                 return deferred.promise;
             };
 
+            ResourceService.persist = function (resource) {
+                var deferred = $q.defer();
+
+                resource.changed = true;
+
+                // a newly created resource should be added to the local list only
+                if (_.isUndefined(resource.id)) {
+                    addResourceToLocalList(resource);
+                } else {
+                    updateCachedList(resource);
+                }
+
+                deferred.resolve(resource);
+
+                return deferred.promise;
+            };
+
             ResourceService.getAll = function () {
                 return Resource.getList().then(function (resourceList) {
                     _.each(resourceList, function (resource) {
@@ -48,13 +65,28 @@ angular.module('symfony-cmf-resource')
                 });
             };
 
-            var updateCachedList = function (resource) {
+            function updateCachedList(resource) {
                 if (_.isUndefined(ResourceService.ResourcesList[resource.id])) {
                     ResourceService.ResourcesList[resource.id] = resource;
                 } else {
                     _.assign(ResourceService.ResourcesList[resource.id], resource);
                 }
-            };
+            }
+
+            function addResourceToLocalList(resource) {
+                resource.pendingUuid = guid();
+                ResourceService.ResourcesList[resource.pendingUuid] = resource;
+            }
+
+            function guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            }
 
             return ResourceService;
         }]

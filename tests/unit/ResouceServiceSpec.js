@@ -3,7 +3,7 @@ describe('ResourceService', function() {
 
     var service, Resource, $q, $rootscope, promise, deferred;
 
-    beforeEach(module('symfony-cmf-resource'));
+    beforeEach(module('angular-cmf-resource'));
 
     beforeEach(function () {
         module(function ($provide) {
@@ -113,6 +113,61 @@ describe('ResourceService', function() {
 
             deferred.resolve(resourcesList);
             $rootscope.$digest();
+        });
+    });
+
+    describe("persist a resource", function () {
+        describe('create new', function () {
+            var promise;
+
+            beforeEach(function () {
+                promise = service.persist({name: 'some name'});
+            });
+
+            it('should add created resource to the cached list', function () {
+                promise.then(function () {
+                    expect(_.size(service.ResourcesList)).toBe(1);
+                });
+                $rootscope.$digest();
+            });
+
+            it('should create a pending uuid on the resource', function () {
+                promise.then(function (data) {
+                    expect(data.pendingUuid).not.toBeNull();
+                });
+                $rootscope.$digest();
+            });
+
+            it('should set the changed flag to true', function () {
+                promise.then(function (data) {
+                    expect(data.changed).toBe(true);
+                });
+                $rootscope.$digest();
+            });
+        });
+
+        describe('change an existing resource', function () {
+            var promise;
+
+            beforeEach(function () {
+                service.ResourcesList = {'some/id': 'test name'};
+                promise = service.persist({id: 'some/id', name: 'some name'});
+            });
+
+            it('should have the changes', function () {
+                promise.then(function (data) {
+                    expect(data.name).toBe('some name');
+                });
+
+                $rootscope.$digest();
+            });
+
+            it('should set the changed flag to true', function () {
+                promise.then(function (data) {
+                    expect(data.changed).toBe(true);
+                });
+                $rootscope.$digest();
+            })
         });
     });
 });
