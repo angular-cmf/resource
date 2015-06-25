@@ -41,10 +41,15 @@ angular.module('symfony-cmf-resource')
             ResourceService.persist = function (resource) {
                 var deferred = $q.defer();
 
+                resource.changed = true;
+
                 // a newly created resource should be added to the local list only
                 if (_.isUndefined(resource.id)) {
                     addResourceToLocalList(resource);
+                } else {
+                    updateCachedList(resource);
                 }
+
                 deferred.resolve(resource);
 
                 return deferred.promise;
@@ -69,7 +74,6 @@ angular.module('symfony-cmf-resource')
             };
 
             function addResourceToLocalList(resource) {
-                resource.changed = true;
                 resource.pendingUuid = guid();
                 ResourceService.ResourcesList[resource.pendingUuid] = resource;
             };

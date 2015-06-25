@@ -138,12 +138,36 @@ describe('ResourceService', function() {
                 $rootscope.$digest();
             });
 
-            it('should set the changed flag to true at all', function () {
+            it('should set the changed flag to true', function () {
                 promise.then(function (data) {
                     expect(data.changed).toBe(true);
                 });
                 $rootscope.$digest();
             });
+        });
+
+        describe('change an existing resource', function () {
+            var promise;
+
+            beforeEach(function () {
+                service.ResourcesList = {'some/id': 'test name'};
+                promise = service.persist({id: 'some/id', name: 'some name'});
+            });
+
+            it('should have the changes', function () {
+                promise.then(function (data) {
+                    expect(data.name).toBe('some name');
+                });
+
+                $rootscope.$digest();
+            });
+
+            it('should set the changed flag to true', function () {
+                promise.then(function (data) {
+                    expect(data.changed).toBe(true);
+                });
+                $rootscope.$digest();
+            })
         });
     });
 });
