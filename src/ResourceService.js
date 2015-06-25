@@ -1,5 +1,5 @@
 
-angular.module('symfony-cmf-resource')
+angular.module('angular-cmf-resource')
     .factory('ResourceService', [
         'Resource',
         'Restangular',

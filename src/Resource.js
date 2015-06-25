@@ -1,4 +1,4 @@
-angular.module('symfony-cmf-resource')
+angular.module('angular-cmf-resource')
     .factory('Resource', ['Restangular', function(Restangular) {
         var Resource = Restangular.service('phpcr_repo');
         Resource.$get = angular.noop;

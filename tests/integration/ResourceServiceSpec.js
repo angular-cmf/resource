@@ -2,7 +2,7 @@ describe('ResourceService working on fakeApi', function () {
     var service, http;
 
     beforeEach(function() {
-        module('symfony-cmf-resource');
+        module('angular-cmf-resource');
 
         inject(function(_ResourceService_, $httpBackend) {
             service = _ResourceService_;

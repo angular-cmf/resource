@@ -3,7 +3,7 @@ describe('ResourceService', function() {
 
     var service, Resource, $q, $rootscope, promise, deferred;
 
-    beforeEach(module('symfony-cmf-resource'));
+    beforeEach(module('angular-cmf-resource'));
 
     beforeEach(function () {
         module(function ($provide) {
