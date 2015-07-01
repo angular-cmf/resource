@@ -13,11 +13,13 @@ module.exports = function(config){
 
             'src/app.js',
             'src/app.config.js',
+            'src/**/*.js',
             'src/*.js',
 
             'tests/fakeApi/*.js',
 
             'tests/unit/*.js',
+            'tests/unit/**/*.js',
             'tests/integration/*.js'
         ],
 

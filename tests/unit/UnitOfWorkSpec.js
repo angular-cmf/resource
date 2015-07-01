@@ -1,4 +1,4 @@
-describe('ResourceService', function() {
+describe('UnitOfWork', function() {
     'use strict';
 
     var service, Resource, $q, $rootscope, promise, deferred;
@@ -16,7 +16,7 @@ describe('ResourceService', function() {
         inject(function ($injector, _$q_, _$rootScope_) {
             $q = _$q_;
             $rootscope = _$rootScope_;
-            service = $injector.get("ResourceService");
+            service = $injector.get("UnitOfWork");
         });
     });
 
@@ -170,4 +170,12 @@ describe('ResourceService', function() {
             })
         });
     });
+
+    describe("flush resources", function () {
+        var promise;
+
+        beforeEach(function () {
+            promise = service.flush();
+        });
+    })
 });

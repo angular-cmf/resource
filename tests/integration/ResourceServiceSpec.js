@@ -1,11 +1,11 @@
-describe('ResourceService working on fakeApi', function () {
+describe('UnitOfWork working on fakeApi', function () {
     var service, http;
 
     beforeEach(function() {
         module('angular-cmf-resource');
 
-        inject(function(_ResourceService_, $httpBackend) {
-            service = _ResourceService_;
+        inject(function(_UnitOfWork_, $httpBackend) {
+            service = _UnitOfWork_;
             http = $httpBackend;
         });
     });
