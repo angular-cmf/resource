@@ -2,7 +2,7 @@ describe('UnitOfWork working on fakeApi', function () {
     var service, http;
 
     beforeEach(function() {
-        module('angular-cmf-resource');
+        module('angularCmf');
 
         inject(function(_UnitOfWork_, $httpBackend) {
             service = _UnitOfWork_;
@@ -34,7 +34,7 @@ describe('UnitOfWork working on fakeApi', function () {
             expect(error).to.be('undefined');
         };
 
-        service.find(null, '/foo')
+        service.find('/foo')
             .then(testResource)
             .catch(failTest);
     });
@@ -49,7 +49,7 @@ describe('UnitOfWork working on fakeApi', function () {
         };
 
         service
-            .find(null, '/foo')
+            .find('/foo')
             .then(testResourcesList)
             .catch(failTest);
     });
@@ -64,7 +64,7 @@ describe('UnitOfWork working on fakeApi', function () {
         };
 
         service
-            .find(null, '/fo')
+            .find('/fo')
             .then(testResourcesList)
             .catch(failTest);
     });

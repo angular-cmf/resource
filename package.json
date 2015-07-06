@@ -1,5 +1,5 @@
 {
-  "name": "angular-cmf-resource",
+  "name": "angular-cmf",
   "version": "0.0.1",
   "author": "Maximilian Berghoff <maximilian.berghoff@gmx.de>",
   "licenses": [
@@ -40,8 +40,8 @@
     "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
-    "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angular-cmf-resource.js",
-    "build:scripts:minify": "uglifyjs dist/angular-cmf-resource.js > dist/angular-cmf-resource.min.js --source-map dist/angular-cmf-resource.js.map",
+    "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.js",
+    "build:scripts:minify": "uglifyjs dist/angularCmf.js > dist/angularCmf.min.js --source-map dist/angularCmf.js.map",
     "prebuild": "npm run test  && npm run clean",
     "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
     "prebuild:ci": "npm run test:ci  && npm run clean",

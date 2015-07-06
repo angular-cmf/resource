@@ -3,7 +3,7 @@ describe('UnitOfWork', function() {
 
     var service, Resource, $q, $rootscope, promise, deferred;
 
-    beforeEach(module('angular-cmf-resource'));
+    beforeEach(module('angularCmf'));
 
     beforeEach(function () {
         module(function ($provide) {
@@ -16,7 +16,7 @@ describe('UnitOfWork', function() {
         inject(function ($injector, _$q_, _$rootScope_) {
             $q = _$q_;
             $rootscope = _$rootScope_;
-            service = $injector.get("UnitOfWork");
+            service = $injector.get('UnitOfWork');
         });
     });
 
@@ -35,7 +35,7 @@ describe('UnitOfWork', function() {
 
             });
 
-            promise = service.find(null, '/some/id');
+            promise = service.find('/some/id');
         });
 
         it('should serve the resolved data', function () {
@@ -82,7 +82,7 @@ describe('UnitOfWork', function() {
         });
 
         it('should increase the number of cached resources by the amount of entries in the list', function () {
-            service.getAll().then(function () {
+            service.findAll().then(function () {
                 expect(_.values(service.ResourcesList).length).toEqual(resourcesList.length);
             });
 
@@ -91,7 +91,7 @@ describe('UnitOfWork', function() {
         });
 
         it('should return promise with the current list of resources', function () {
-            service.getAll().then(function (list) {
+            service.findAll().then(function (list) {
                 expect(list).toEqual(service.ResourcesList);
             });
 
@@ -106,7 +106,7 @@ describe('UnitOfWork', function() {
                 {id: 'some-other/id'}
             ];
 
-            service.getAll().then(function (list) {
+            service.findAll().then(function (list) {
                 expect(_.values(service.ResourcesList).length).toEqual(2);
                 expect(service.ResourcesList['some/id'].name).toEqual('Some resource');
             });

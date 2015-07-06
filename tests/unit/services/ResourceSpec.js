@@ -1,12 +1,8 @@
 describe('Resource', function() {
     var Resource = {}, Restangular = {};
 
-    beforeEach(module('angular-cmf-resource', function ($provide) {
-        Restangular = {
-            service: function(value) {
-                return 'something';
-            }
-        };
+    beforeEach(module('angularCmf', function ($provide) {
+        Restangular = jasmine.createSpyObj('Resource', ['service']);
 
         $provide.value('Restangular', Restangular);
     }));
