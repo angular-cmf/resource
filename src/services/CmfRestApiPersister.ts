@@ -3,10 +3,9 @@
 module angularCmf.resource {
     'use strict';
 
-    class CmfRestApiPersister implements PersisterInterface
+    export class CmfRestApiPersister implements PersisterInterface
     {
         private Resource;
-        private Persister;
 
         static $inject = ['Resource'];
 
@@ -23,7 +22,7 @@ module angularCmf.resource {
         }
 
         getAll() {
-
+            return this.Resource.getList();
         }
 
         remove(resource) {

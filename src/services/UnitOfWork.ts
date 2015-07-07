@@ -25,7 +25,7 @@ module angularCmf.resource {
             } else if (this.CacheList.isRegistered(cleanId)) {
                 deferred.resolve(this.CacheList.get(id));
             } else {
-                this.Persister.get(id).then(function (resource) {
+                this.Persister.get(id).then((resource) => {
                     this.CacheList.registerResource(resource);
                 });
             }
@@ -34,19 +34,40 @@ module angularCmf.resource {
         }
 
         persist(resource) {
+            let deferred = this.$q.defer();
 
+            // a newly created resource should be added to the local list only
+            if (this.CacheList.isRegistered(resource.id)) {
+                this.CacheList.registerResource(resource);
+            } else {
+                this.CacheList.updateResource(resource);
+            }
+
+            deferred.resolve(resource);
+
+            return deferred.promise;
         }
 
         remove(resource) {
+            let deferred = this.$q.defer();
 
+            return deferred.promise;
         }
 
         flush() {
+            let deferred = this.$q.defer();
 
+            return deferred.promise;
         }
 
         findAll() {
+            return this.Persister.getAll().then((resourceList) => {
+                _.each(resourceList, (resource) => {
+                    this.CacheList.updateResource(resource);
+                });
 
+                return this.CacheList.getAll();
+            });
         }
 
         private removeTrailingSlash(str: string) {

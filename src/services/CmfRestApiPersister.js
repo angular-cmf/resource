@@ -14,12 +14,14 @@ var angularCmf;
             CmfRestApiPersister.prototype.save = function (resource) {
             };
             CmfRestApiPersister.prototype.getAll = function () {
+                return this.Resource.getList();
             };
             CmfRestApiPersister.prototype.remove = function (resource) {
             };
             CmfRestApiPersister.$inject = ['Resource'];
             return CmfRestApiPersister;
         })();
+        resource_1.CmfRestApiPersister = CmfRestApiPersister;
         angular.module('angularCmf').service('CmfRestApiPersister', CmfRestApiPersister);
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));

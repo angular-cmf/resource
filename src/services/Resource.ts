@@ -2,12 +2,13 @@
 
 module angularCmf.resource {
     export class Resource {
-        public Restangular;
+        private Restangular;
 
         static $inject = ['Restangular'];
 
         constructor (Restangular) {
             this.Restangular = Restangular;
+
         }
 
         static instance(Restangular) {

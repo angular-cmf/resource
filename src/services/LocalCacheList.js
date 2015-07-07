@@ -6,6 +6,10 @@ var angularCmf;
         'use strict';
         var LocalCacheList = (function () {
             function LocalCacheList() {
+                /**
+                 * the list of all registered resources
+                 */
+                this.list = [];
             }
             /**
              * Registers a resource by its id or its pending uuid.
@@ -13,12 +17,21 @@ var angularCmf;
              * @param resource
              */
             LocalCacheList.prototype.registerResource = function (resource) {
-                if (_.isUndefined(resource.id)) {
-                    this.list[resource.pendingUuid] = resource;
+                if (null === resource.pendingUuid && null !== resource.id) {
+                    if (!this.isRegistered(resource.id)) {
+                        this.list[resource.id] = resource;
+                        return true;
+                    }
+                    throw new Error('Problems while registering ' + resource.id + '. It is still registered with its id.');
                 }
-                else {
-                    this.list[resource.id] = resource;
+                else if (null !== resource.pendingUuid && null === resource.id) {
+                    if (!this.isRegistered(resource.pendingUuid)) {
+                        this.list[resource.pendingUuid] = resource;
+                        return true;
+                    }
+                    throw new Error('Problems while registering ' + resource.pendingUuid + '. It is still registered with its pending uuid.');
                 }
+                throw new Error('Problems while registering resource. Id nor uuid is set.');
             };
             /**
              * Returns the complete list of registered resources.
@@ -28,15 +41,40 @@ var angularCmf;
             LocalCacheList.prototype.getAll = function () {
                 return this.list;
             };
+            /**
+             * Checks whether the resource is registered. The registration can done by its id or an uuid.
+             * @param id
+             *
+             * @returns {boolean}
+             */
             LocalCacheList.prototype.isRegistered = function (id) {
+                return !_.isUndefined(this.list[id]);
             };
+            /**
+             * @param id
+             *
+             * @returns {*}
+             */
             LocalCacheList.prototype.get = function (id) {
+                if (this.isRegistered(id)) {
+                    return this.list[id];
+                }
+                return null;
             };
             LocalCacheList.prototype.updateResource = function (resource) {
-                if (_.isUndefined(this.list[resource.id])) {
-                    throw new Error('Resource is not registered');
+                if (null === resource.pendingUuid && null !== resource.id) {
+                    if (this.isRegistered(resource.id)) {
+                        _.assign(this.list[resource.id], resource);
+                        return true;
+                    }
                 }
-                _.assign(this.list[resource.id], resource);
+                else if (null !== resource.pendingUuid && null === resource.id) {
+                    if (this.isRegistered(resource.pendingUuid)) {
+                        _.assign(this.list[resource.pendingUuid], resource);
+                        return true;
+                    }
+                }
+                throw new Error('Problems while updating resource.');
             };
             return LocalCacheList;
         })();

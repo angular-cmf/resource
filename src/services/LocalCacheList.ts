@@ -16,7 +16,7 @@ module angularCmf.resource {
         /**
          * the list of all registered resources
          */
-        private list: any[];
+        private list: any[] = [];
 
         /**
          * Registers a resource by its id or its pending uuid.
@@ -24,11 +24,25 @@ module angularCmf.resource {
          * @param resource
          */
         registerResource(resource) {
-            if (_.isUndefined(resource.id)) {
-                this.list[resource.pendingUuid] = resource;
-            } else {
-                this.list[resource.id] = resource;
+            if (null === resource.pendingUuid && null !== resource.id) {
+                if (!this.isRegistered(resource.id)) {
+                    this.list[resource.id] = resource;
+
+                    return true;
+                }
+
+                throw  new Error('Problems while registering ' + resource.id + '. It is still registered with its id.');
+            } else if (null !== resource.pendingUuid && null === resource.id) {
+                if (!this.isRegistered(resource.pendingUuid)) {
+                    this.list[resource.pendingUuid] = resource;
+
+                    return true;
+                }
+
+                throw  new Error('Problems while registering ' + resource.pendingUuid + '. It is still registered with its pending uuid.');
             }
+
+            throw  new Error('Problems while registering resource. Id nor uuid is set.');
         }
 
         /**
@@ -40,20 +54,46 @@ module angularCmf.resource {
             return this.list;
         }
 
+        /**
+         * Checks whether the resource is registered. The registration can done by its id or an uuid.
+         * @param id
+         *
+         * @returns {boolean}
+         */
         isRegistered(id: string) {
-
+            return !_.isUndefined(this.list[id]);
         }
 
+        /**
+         * @param id
+         *
+         * @returns {*}
+         */
         get(id: string) {
+            if (this.isRegistered(id)) {
+                return this.list[id];
+            }
 
+            return null;
         }
 
         updateResource(resource) {
-            if (_.isUndefined(this.list[resource.id])) {
-                throw new Error('Resource is not registered');
+            if (null === resource.pendingUuid && null !== resource.id) {
+                if (this.isRegistered(resource.id)) {
+                    _.assign(this.list[resource.id], resource);
+
+                    return true;
+                }
+            } else if (null !== resource.pendingUuid && null === resource.id) {
+                if (this.isRegistered(resource.pendingUuid)) {
+                    _.assign(this.list[resource.pendingUuid], resource);
+
+                    return true;
+                }
             }
 
-            _.assign(this.list[resource.id], resource);
+
+            throw  new Error('Problems while updating resource.');
         }
     }
 
