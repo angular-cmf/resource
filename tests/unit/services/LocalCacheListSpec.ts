@@ -66,7 +66,7 @@ describe('LocalCacheList', function () {
         });
     });
 
-    describe('udate an existing resource', function () {
+    describe('update an existing resource', function () {
         var originResource, destinationResource;
 
         describe('by an id', function () {
@@ -91,8 +91,6 @@ describe('LocalCacheList', function () {
                var func = function () {
                    list.updateResource({id: 'some-other/id'});
                };
-
-                console.log(list.getAll());
 
                 expect(func).toThrowError('Problems while updating resource.');
             });

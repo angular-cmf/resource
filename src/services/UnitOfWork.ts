@@ -17,45 +17,52 @@ module angularCmf.resource {
         }
 
         find(id: string) {
-            let cleanId = this.removeTrailingSlash(id);
-            let deferred = this.$q.defer();
+            var deferred = this.$q.defer();
+            if (!_.isString(id)) {
+                deferred.reject(new Error('id must be a string.'));
 
-            if (_.isUndefined(cleanId)) {
-                deferred.reject(new Error('id must not be undefined.'));
-            } else if (this.CacheList.isRegistered(cleanId)) {
-                deferred.resolve(this.CacheList.get(id));
-            } else {
-                this.Persister.get(id).then((resource) => {
-                    this.CacheList.registerResource(resource);
-                });
+                return deferred.promise;
             }
 
-            return deferred.promise
+            var cleanId = this.removeTrailingSlash(id);
+            if (this.CacheList.isRegistered(cleanId)) {
+                deferred.resolve(this.CacheList.get(cleanId));
+
+                return deferred.promise;
+            }
+
+            // get a fresh resource from the persister
+            return this.Persister.get(id).then((resource) => {
+                this.CacheList.registerResource(resource);
+
+                return resource;
+            });
         }
 
         persist(resource) {
-            let deferred = this.$q.defer();
+            var deferred = this.$q.defer();
+            resource.changed = true;
 
             // a newly created resource should be added to the local list only
-            if (this.CacheList.isRegistered(resource.id)) {
+            if (!this.CacheList.isRegistered(resource.id)) {
+                resource.pendingUuid = this.guid();
                 this.CacheList.registerResource(resource);
             } else {
                 this.CacheList.updateResource(resource);
             }
-
             deferred.resolve(resource);
 
             return deferred.promise;
         }
 
         remove(resource) {
-            let deferred = this.$q.defer();
+            var deferred = this.$q.defer();
 
             return deferred.promise;
         }
 
         flush() {
-            let deferred = this.$q.defer();
+            var deferred = this.$q.defer();
 
             return deferred.promise;
         }
@@ -76,6 +83,16 @@ module angularCmf.resource {
             }
 
             return str;
+        }
+
+        private guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
         }
     }
 
