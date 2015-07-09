@@ -25,4 +25,3 @@ var angularCmf;
         angular.module('angularCmf').service('CmfRestApiPersister', CmfRestApiPersister);
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));
-//# sourceMappingURL=CmfRestApiPersister.js.map

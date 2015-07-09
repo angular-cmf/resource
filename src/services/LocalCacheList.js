@@ -82,4 +82,3 @@ var angularCmf;
         angular.module('angularCmf').service('LocalCacheList', LocalCacheList);
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));
-//# sourceMappingURL=LocalCacheList.js.map

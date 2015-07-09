@@ -15,4 +15,3 @@ var angularCmf;
             .module('angularCmf', ['angularCmf.config']);
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));
-//# sourceMappingURL=app.js.map

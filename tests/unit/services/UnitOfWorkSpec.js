@@ -48,8 +48,7 @@ describe('UnitOfWork', function () {
             $rootscope.$digest();
         });
         it('should reject for undefined ids', function () {
-            UnitOfWork.find(null).then(function () {
-            }, function (err) {
+            UnitOfWork.find(null).then(function () { }, function (err) {
                 expect(err.message).toBe('id must be a string.');
             });
             $rootscope.$digest();
@@ -142,4 +141,3 @@ describe('UnitOfWork', function () {
         });
     });
 });
-//# sourceMappingURL=UnitOfWorkSpec.js.map

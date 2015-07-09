@@ -89,9 +89,7 @@ describe('CmfRestApiPersister with restangular', function () {
         });
 
         it('should reject with an error message', function () {
-            promise.then(function () {
-                expect(true).toBe(false, 'should not have bin called');
-            }, function (error: Error) {
+            promise.then(function () {}, function (error: Error) {
                 expect(error.message).toBe('some error');
             });
 
