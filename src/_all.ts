@@ -8,3 +8,4 @@
 /// <reference path='services/Resource.ts' />
 /// <reference path='services/UnitOfWorkInterface.ts' />
 /// <reference path='services/UnitOfWork.ts' />
+/// <reference path='app.config.ts' />

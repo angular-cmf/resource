@@ -48,13 +48,13 @@
     "postbuild:tsc": "tsd install angular2 es6-promise rx rx-lite angular jasmine lodash restangular",
     "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts",
 
-    "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.js",
+    "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.resource.js",
     "build:scripts:minify": "uglifyjs dist/angularCmf.resource.js > dist/angularCmf.resource.min.js --source-map dist/angularCmf.resource.js.map",
 
-    "prebuild": "npm run build:tsc && test  && npm run clean",
+    "prebuild": "npm run build:tsc &&  npm run test  && npm run clean",
     "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
 
-    "prebuild:ci": "npm run build:tsc && test:ci",
+    "prebuild:ci": "npm run build:tsc && npm run test:ci",
     "build:ci": "npm run build:scripts:concatenate && npm run build:scripts:minify"
   }
 }
