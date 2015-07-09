@@ -1,5 +1,5 @@
 {
-  "name": "angular-cmf",
+  "name": "angular-cmf-resource",
   "version": "0.0.1",
   "author": "Maximilian Berghoff <maximilian.berghoff@gmx.de>",
   "licenses": [
@@ -45,7 +45,7 @@
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
 
-    "postbuild:tsc": "tsd install angular2 es6-promise rx rx-lite angular jasmine lodash restangular",
+    "prebuild:tsc": "tsd install angular2 es6-promise rx rx-lite angular jasmine lodash restangular angular-mocks",
     "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts",
 
     "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.resource.js",
