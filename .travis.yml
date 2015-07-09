@@ -4,6 +4,7 @@ language: node_js
 node_js:
   - '0.10'
   - '0.11'
+  - 'iojs'
 
 # travis can run real browser, so we just need to set up a virtual screen
 before_script:

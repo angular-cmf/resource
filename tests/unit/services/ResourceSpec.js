@@ -20,3 +20,4 @@ describe('Resource', function () {
         expect(Resource.pendingUuid).toBeNull();
     });
 });
+//# sourceMappingURL=ResourceSpec.js.map
