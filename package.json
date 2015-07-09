@@ -41,6 +41,7 @@
 
     "pretest": "npm install &&  npm run lint",
     "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
+
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
 
@@ -49,8 +50,10 @@
 
     "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.js",
     "build:scripts:minify": "uglifyjs dist/angularCmf.resource.js > dist/angularCmf.resource.min.js --source-map dist/angularCmf.resource.js.map",
+
     "prebuild": "npm run build:tsc && test  && npm run clean",
     "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
+
     "prebuild:ci": "npm run build:tsc && test:ci",
     "build:ci": "npm run build:scripts:concatenate && npm run build:scripts:minify"
   }
