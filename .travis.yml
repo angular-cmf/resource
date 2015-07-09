@@ -4,10 +4,11 @@ language: node_js
 node_js:
   - '0.10'
   - '0.11'
+  - 'iojs'
 
 # travis can run real browser, so we just need to set up a virtual screen
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
-script: npm run test:ci
+script: npm run build:ci

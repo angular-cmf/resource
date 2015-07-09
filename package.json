@@ -27,6 +27,8 @@
     "karma-jasmine": "~0.2.0",
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-story-reporter": "~0.3.1",
+    "tsd": "^0.6.3",
+    "typescript": "^1.5.0-beta",
     "uglify-js": "latest"
   },
   "config": {
@@ -36,15 +38,23 @@
     "clean": "rm dist/*.*",
     "lint": "jshint src/*.js",
     "postinstall": "bower install",
+
     "pretest": "npm install &&  npm run lint",
     "test": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers",
+
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
-    "build:scripts:concatenate": "browserify src/*.js > dist/angular-cmf-resource.js",
-    "build:scripts:minify": "uglifyjs dist/angular-cmf-resource.js > dist/angular-cmf-resource.min.js --source-map dist/angular-cmf-resource.js.map",
-    "prebuild": "npm run test  && npm run clean",
+
+    "prebuild:tsc": "tsd install angular2 es6-promise rx rx-lite angular jasmine lodash restangular angular-mocks",
+    "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts",
+
+    "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.resource.js",
+    "build:scripts:minify": "uglifyjs dist/angularCmf.resource.js > dist/angularCmf.resource.min.js --source-map dist/angularCmf.resource.js.map",
+
+    "prebuild": "npm run build:tsc &&  npm run test  && npm run clean",
     "build": "npm run build:scripts:concatenate && npm run build:scripts:minify",
-    "prebuild:ci": "npm run test:ci  && npm run clean",
+
+    "prebuild:ci": "npm run build:tsc && npm run test:ci",
     "build:ci": "npm run build:scripts:concatenate && npm run build:scripts:minify"
   }
 }
