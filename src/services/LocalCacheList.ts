@@ -1,15 +1,16 @@
 /// <reference path='../_all.ts' />
 
-interface ICacheList {
-    registerResource(resource);
-    getAll(): any[];
-    updateResource(resource);
-    isRegistered(id: string);
-    get(id: string);
-}
-
 module angularCmf.resource {
     'use strict';
+
+    interface ICacheList {
+        registerResource(resource);
+        getAll(): any[];
+        updateResource(resource);
+        isRegistered(id: string);
+        get(id: string);
+        getChangedResources();
+    }
 
     export class LocalCacheList implements ICacheList {
 
@@ -55,6 +56,17 @@ module angularCmf.resource {
         }
 
         /**
+         * Return all changed resources
+         *
+         * @returns {TResult[]}
+         */
+        getChangedResources() {
+            return _.map(this.list, function (resource) {
+                return resource.changed;
+            });
+        }
+
+        /**
          * Checks whether the resource is registered. The registration can done by its id or an uuid.
          * @param id
          *
@@ -77,6 +89,16 @@ module angularCmf.resource {
             return null;
         }
 
+        /**
+         * Updates an existing resource.
+         *
+         * Those resources can be found by its pending uuid or its id.
+         * When a resource with a pending uuid should be updated and has a id now, it will be registered with
+         * its id then.
+         *
+         * @param resource
+         * @returns {boolean}
+         */
         updateResource(resource) {
             if (null === resource.pendingUuid && null !== resource.id) {
                 if (this.isRegistered(resource.id)) {
@@ -87,6 +109,13 @@ module angularCmf.resource {
             } else if (null !== resource.pendingUuid && null === resource.id) {
                 if (this.isRegistered(resource.pendingUuid)) {
                     _.assign(this.list[resource.pendingUuid], resource);
+
+                    return true;
+                }
+            } else if (null !== resource.pendingUuid && null !== resource.id) {
+                if (this.isRegistered(resource.pendingUuid)) {
+                    this.list[resource.id] = resource;
+                    delete this.list[resource.pendingUuid];
 
                     return true;
                 }

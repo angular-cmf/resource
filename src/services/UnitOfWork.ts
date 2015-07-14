@@ -62,9 +62,18 @@ module angularCmf.resource {
         }
 
         flush() {
-            var deferred = this.$q.defer();
+            var promises = [];
 
-            return deferred.promise;
+            _.each(this.CacheList.getChangedResources(), (resource) => {
+                promises.push(this.Persister.save(resource).then((data) => {
+                    resource.changed = false;
+                    _.assign(resource, data);
+
+                    return this.CacheList.updateResource(resource);
+                }));
+            });
+
+            return this.$q.all(promises).then(() => {return true}, () => {return false});
         }
 
         findAll() {
