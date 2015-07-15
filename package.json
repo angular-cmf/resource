@@ -45,7 +45,7 @@
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
 
-    "prebuild:tsc": "tsd update --save --overwrite",
+    "prebuild:tsc": "tsd reinstall --save --overwrite --keep-unreferenced",
     "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts",
 
     "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.resource.js",
