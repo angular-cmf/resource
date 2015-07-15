@@ -25,7 +25,7 @@ module angularCmf.resource {
          * @param resource
          */
         registerResource(resource) {
-            if (null === resource.pendingUuid && null !== resource.id) {
+            if (_.isString(resource.id)) {
                 if (!this.isRegistered(resource.id)) {
                     this.list[resource.id] = resource;
 
@@ -33,7 +33,7 @@ module angularCmf.resource {
                 }
 
                 throw  new Error('Problems while registering ' + resource.id + '. It is still registered with its id.');
-            } else if (null !== resource.pendingUuid && null === resource.id) {
+            } else if (null !== resource.pendingUuid) {
                 if (!this.isRegistered(resource.pendingUuid)) {
                     this.list[resource.pendingUuid] = resource;
 

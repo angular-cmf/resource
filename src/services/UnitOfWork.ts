@@ -32,7 +32,7 @@ module angularCmf.resource {
             }
 
             // get a fresh resource from the persister
-            return this.Persister.get(id).then((resource) => {
+            return this.Persister.get(cleanId).then((resource) => {
                 this.CacheList.registerResource(resource);
 
                 return resource;

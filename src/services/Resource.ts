@@ -12,12 +12,13 @@ module angularCmf.resource {
         }
 
         static instance(Restangular) {
-            let instance;
+            var instance;
 
             instance = Restangular.service('phpcr_repo');
             instance['$get'] = angular.noop;
             instance['changed'] = false;
             instance['pendingUuid'] = null;
+            instance['id'] = null;
 
             return instance;
         }
