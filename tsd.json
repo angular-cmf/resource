@@ -6,34 +6,34 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "angularjs/angular.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "jquery/jquery.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "rx/rx.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "angular2/angular2.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "jasmine/jasmine.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "lodash/lodash.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "restangular/restangular.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "rx/rx-lite.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     },
     "angularjs/angular-mocks.d.ts": {
-      "commit": "be03157bace6e6465e63f13073d7b68e8ea1303c"
+      "commit": "0fff32b558aa91ba24cfca5479aba02e4ef2fafe"
     }
   }
 }

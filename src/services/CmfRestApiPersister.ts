@@ -27,11 +27,10 @@ module angularCmf.resource {
         }
 
         save(resource) {
-            if (_.isUndefined(resource.pendingUuid)) {
+            if (!_.isUndefined(resource.id)) {
                 return resource.put();
             } else {
-                var restanuglarResource = this.Restangular.clone();
-                return restanuglarResource.post(resource);
+                return this.Resource.post(resource);
             }
         }
 

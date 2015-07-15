@@ -45,20 +45,27 @@ var angularCmf;
     (function (resource_1) {
         'use strict';
         var CmfRestApiPersister = (function () {
-            function CmfRestApiPersister(resource) {
+            function CmfRestApiPersister(resource, restangular) {
                 this.Resource = resource;
+                this.Restangular = restangular;
             }
             CmfRestApiPersister.prototype.get = function (id) {
                 return this.Resource.one(id).get();
             };
             CmfRestApiPersister.prototype.save = function (resource) {
+                if (!_.isUndefined(resource.id)) {
+                    return resource.put();
+                }
+                else {
+                    return this.Resource.post(resource);
+                }
             };
             CmfRestApiPersister.prototype.getAll = function () {
                 return this.Resource.getList();
             };
             CmfRestApiPersister.prototype.remove = function (resource) {
             };
-            CmfRestApiPersister.$inject = ['Resource'];
+            CmfRestApiPersister.$inject = ['Resource', 'Restangular'];
             return CmfRestApiPersister;
         })();
         resource_1.CmfRestApiPersister = CmfRestApiPersister;
@@ -78,7 +85,7 @@ var angularCmf;
                 /**
                  * the list of all registered resources
                  */
-                this.list = [];
+                this.list = {};
             }
             /**
              * Registers a resource by its id or its pending uuid.
@@ -86,14 +93,14 @@ var angularCmf;
              * @param resource
              */
             LocalCacheList.prototype.registerResource = function (resource) {
-                if (null === resource.pendingUuid && null !== resource.id) {
+                if (_.isString(resource.id)) {
                     if (!this.isRegistered(resource.id)) {
                         this.list[resource.id] = resource;
                         return true;
                     }
                     throw new Error('Problems while registering ' + resource.id + '. It is still registered with its id.');
                 }
-                else if (null !== resource.pendingUuid && null === resource.id) {
+                else if (null !== resource.pendingUuid) {
                     if (!this.isRegistered(resource.pendingUuid)) {
                         this.list[resource.pendingUuid] = resource;
                         return true;
@@ -109,6 +116,20 @@ var angularCmf;
              */
             LocalCacheList.prototype.getAll = function () {
                 return this.list;
+            };
+            /**
+             * Return all changed resources
+             *
+             * @returns {TResult[]}
+             */
+            LocalCacheList.prototype.getChangedResources = function () {
+                var resources = [];
+                _.forEach(this.list, function (resource) {
+                    if (resource.changed) {
+                        resources.push(resource);
+                    }
+                });
+                return resources;
             };
             /**
              * Checks whether the resource is registered. The registration can done by its id or an uuid.
@@ -130,6 +151,16 @@ var angularCmf;
                 }
                 return null;
             };
+            /**
+             * Updates an existing resource.
+             *
+             * Those resources can be found by its pending uuid or its id.
+             * When a resource with a pending uuid should be updated and has a id now, it will be registered with
+             * its id then.
+             *
+             * @param resource
+             * @returns {boolean}
+             */
             LocalCacheList.prototype.updateResource = function (resource) {
                 if (null === resource.pendingUuid && null !== resource.id) {
                     if (this.isRegistered(resource.id)) {
@@ -140,6 +171,13 @@ var angularCmf;
                 else if (null !== resource.pendingUuid && null === resource.id) {
                     if (this.isRegistered(resource.pendingUuid)) {
                         _.assign(this.list[resource.pendingUuid], resource);
+                        return true;
+                    }
+                }
+                else if (null !== resource.pendingUuid && null !== resource.id) {
+                    if (this.isRegistered(resource.pendingUuid)) {
+                        this.list[resource.id] = resource;
+                        delete this.list[resource.pendingUuid];
                         return true;
                     }
                 }
@@ -171,6 +209,7 @@ var angularCmf;
                 instance['$get'] = angular.noop;
                 instance['changed'] = false;
                 instance['pendingUuid'] = null;
+                instance['id'] = null;
                 return instance;
             };
             Resource.$inject = ['Restangular'];
@@ -207,7 +246,7 @@ var angularCmf;
                     return deferred.promise;
                 }
                 // get a fresh resource from the persister
-                return this.Persister.get(id).then(function (resource) {
+                return this.Persister.get(cleanId).then(function (resource) {
                     _this.CacheList.registerResource(resource);
                     return resource;
                 });
@@ -231,8 +270,16 @@ var angularCmf;
                 return deferred.promise;
             };
             UnitOfWork.prototype.flush = function () {
-                var deferred = this.$q.defer();
-                return deferred.promise;
+                var _this = this;
+                var promises = [];
+                _.each(this.CacheList.getChangedResources(), function (resource) {
+                    promises.push(_this.Persister.save(resource).then(function (data) {
+                        resource.changed = false;
+                        _.assign(resource, data);
+                        return _this.CacheList.updateResource(resource);
+                    }));
+                });
+                return this.$q.all(promises).then(function () { return true; }, function () { return false; });
             };
             UnitOfWork.prototype.findAll = function () {
                 var _this = this;

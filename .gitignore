@@ -9,3 +9,5 @@ tests/unit/services/*.js
 tests/unit/services/*.map
 tests/_test_all.js
 tests/_test_all.js.map
+tests/fakeApi/*.js
+tests/fakeApi/*.map

@@ -7,6 +7,7 @@ module angularCmf.resource.test {
             "payload_alias": null,
             "payload_type": "nt:unstructured",
             "path": "\/foo",
+            "id": "foo",
             "repository_path": "\/foo",
             "children": [],
             "payload": {

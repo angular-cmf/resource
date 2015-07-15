@@ -50,7 +50,6 @@ describe('Module working on fake API', function () {
         });
     });
     describe('persist a resource', function () {
-        // todo  find a solution for the  [] and {} of the list in LocalCache
         it('should set the changed flag to true', function () {
             service.persist({ name: 'some name' }).then(function (data) {
                 expect(data.changed).toBe(true);
@@ -67,7 +66,58 @@ describe('Module working on fake API', function () {
         });
     });
     describe('flush all changed resources', function () {
-        // todo tests for flushing a resource
+        var resource, promise;
+        describe('post for a new resource', function () {
+            beforeEach(function () {
+                resource = { name: 'some name' };
+                promise = service.persist(resource);
+            });
+            it('should return true in success case', function () {
+                $http.whenPOST('api/phpcr_repo').respond(200, angularCmf.resource.test.HttpContent.truthy_content);
+                promise.then(function () {
+                    service.flush().then(function (data) {
+                        expect(data).toBe(true);
+                    });
+                });
+                $rootScope.$digest();
+            });
+            it('should return false in error case', function () {
+                $http.whenPOST('api/phpcr_repo').respond(500, {});
+                promise.then(function () {
+                    service.flush().then(function (data) {
+                        expect(data).toBe(false);
+                    });
+                });
+                $rootScope.$digest();
+            });
+        });
+        describe('put for an existing resource', function () {
+            beforeEach(function () {
+                $http.whenGET('api/phpcr_repo/foo').respond(200, angularCmf.resource.test.HttpContent.truthy_content);
+                service.find('foo').then(function (data) {
+                    data.name = 'some other name';
+                    promise = service.persist(data);
+                });
+            });
+            it('should return true in success case', function () {
+                $http.whenPUT('api/phpcr_repo/foo').respond(200, angularCmf.resource.test.HttpContent.truthy_content);
+                promise.then(function () {
+                    service.flush().then(function (data) {
+                        expect(data).toBe(true);
+                    });
+                });
+                $rootScope.$digest();
+            });
+            it('should return false in error case', function () {
+                $http.whenPUT('api/phpcr_repo/foo').respond(500, {});
+                promise.then(function () {
+                    service.flush().then(function (data) {
+                        expect(data).toBe(false);
+                    });
+                });
+                $rootScope.$digest();
+            });
+        });
     });
 });
 //# sourceMappingURL=ResourceServiceSpec.js.map

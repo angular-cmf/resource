@@ -5,7 +5,7 @@ module angularCmf.resource {
 
     interface ICacheList {
         registerResource(resource);
-        getAll(): any[];
+        getAll();
         updateResource(resource);
         isRegistered(id: string);
         get(id: string);
@@ -17,7 +17,7 @@ module angularCmf.resource {
         /**
          * the list of all registered resources
          */
-        private list: any[] = [];
+        private list: _.Dictionary<angularCmf.resource.IResource> = {};
 
         /**
          * Registers a resource by its id or its pending uuid.
@@ -36,7 +36,6 @@ module angularCmf.resource {
             } else if (null !== resource.pendingUuid) {
                 if (!this.isRegistered(resource.pendingUuid)) {
                     this.list[resource.pendingUuid] = resource;
-
                     return true;
                 }
 
@@ -61,9 +60,14 @@ module angularCmf.resource {
          * @returns {TResult[]}
          */
         getChangedResources() {
-            return _.map(this.list, function (resource) {
-                return resource.changed;
+            var resources = [];
+            _.forEach(this.list, function (resource) {
+                if (resource.changed) {
+                    resources.push(resource);
+                }
             });
+
+            return resources;
         }
 
         /**

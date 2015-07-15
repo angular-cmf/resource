@@ -6,8 +6,9 @@ describe('CmfRestApiPersister with restangular', function () {
     var persister, resource, $q, $rootscope, restangular;
 
     beforeEach(function () {
-        resource = jasmine.createSpyObj('Resource', ['one', 'getList']);
-        restangular = jasmine.createSpyObj('Restangular', ['clone']);
+        resource = jasmine.createSpyObj('Resource', ['one', 'getList', 'post', 'put']);
+        restangular = jasmine.createSpyObj('Restangular', ['clone', 'service']);
+
         persister = new angularCmf.resource.CmfRestApiPersister(resource, restangular);
 
         inject(function (_$q_, _$rootScope_) {
@@ -58,7 +59,7 @@ describe('CmfRestApiPersister with restangular', function () {
     });
 
     describe('save a single resource', function () {
-        var promise, deferred, restangularResource;
+        var promise, deferred, resourceToPersist;
 
         beforeEach(function () {
             deferred = $q.defer();
@@ -66,33 +67,30 @@ describe('CmfRestApiPersister with restangular', function () {
 
         describe('post it (pending uuid exists id not)', function () {
             beforeEach(function () {
-                restangularResource = jasmine.createSpyObj('Resource', ['post']);
-                restangular.clone.and.returnValue(restangularResource);
-                restangularResource.post.and.returnValue(deferred.promise);
+                resource.post.and.returnValue(deferred.promise);
 
-                resource = {pendingUuid: 'some uuid', name: 'some name'};
-                promise = persister.save(resource);
-            });
-
-            it('should clone the restangular, to get a new resource', function () {
-                expect(restangular.clone).toHaveBeenCalled();
+                resourceToPersist = {pendingUuid: 'some uuid', name: 'some name'};
+                promise = persister.save(resourceToPersist);
             });
 
             it('should post the resource', function () {
-                expect(restangularResource.post).toHaveBeenCalledWith(resource);
+                expect(resource.post).toHaveBeenCalledWith(resourceToPersist);
             });
         });
 
         describe('put it (id exists so the resource too)', function () {
             beforeEach(function () {
-                resource = jasmine.createSpyObj('Resource', ['put']);
+                resourceToPersist = jasmine.createSpyObj('ResourceObject', ['put']);
+                resourceToPersist['id'] = 'some/id';
+                resourceToPersist['name'] = 'some name';
+                resourceToPersist.put.and.returnValue(deferred.promise);
 
-                promise = persister.save(resource);
+                promise = persister.save(resourceToPersist);
             });
 
             it('should put the resource', function () {
-                expect(resource.put).toHaveBeenCalled();
-            })
+                expect(resourceToPersist.put).toHaveBeenCalled();
+            });
         });
     });
 
@@ -105,7 +103,6 @@ describe('CmfRestApiPersister with restangular', function () {
 
         beforeEach(function () {
             deferred = $q.defer();
-
             resource.getList.and.returnValue(deferred.promise);
             resourcesList = [
                 {id: 'some/id'},

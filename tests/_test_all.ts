@@ -6,3 +6,5 @@
 /// <resource path='../src/services/CmfRestApiPersister.ts' />
 /// <resource path='../src/services/Resource.ts' />
 /// <resource path='../src/services/LocalCacheList.ts' />
+/// <resource path='../src/services/UnitOfWork.ts' />
+/// <resource path='../src/services/UnitOfWorkInterface.ts' />
