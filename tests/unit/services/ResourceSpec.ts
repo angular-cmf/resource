@@ -26,4 +26,8 @@ describe('Resource', function() {
     it('should have set the pending uuid set to null', function () {
         expect(Resource.pendingUuid).toBeNull();
     });
+
+    it('should have set the id to null on default', function () {
+       expect(Resource.id).toBeNull();
+    });
 });

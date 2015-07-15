@@ -32,7 +32,7 @@ module angularCmf.resource {
             }
 
             // get a fresh resource from the persister
-            return this.Persister.get(id).then((resource) => {
+            return this.Persister.get(cleanId).then((resource) => {
                 this.CacheList.registerResource(resource);
 
                 return resource;
@@ -62,9 +62,18 @@ module angularCmf.resource {
         }
 
         flush() {
-            var deferred = this.$q.defer();
+            var promises = [];
 
-            return deferred.promise;
+            _.each(this.CacheList.getChangedResources(), (resource) => {
+                promises.push(this.Persister.save(resource).then((data) => {
+                    resource.changed = false;
+                    _.assign(resource, data);
+
+                    return this.CacheList.updateResource(resource);
+                }));
+            });
+
+            return this.$q.all(promises).then(() => {return true}, () => {return false});
         }
 
         findAll() {

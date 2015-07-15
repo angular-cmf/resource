@@ -1,6 +1,12 @@
 /// <reference path='../_all.ts' />
 
+
 module angularCmf.resource {
+    export interface IResource {
+        changed: boolean;
+        id: number;
+        pendingUuid: string;
+    }
     export class Resource {
         private Restangular;
 
@@ -12,12 +18,13 @@ module angularCmf.resource {
         }
 
         static instance(Restangular) {
-            let instance;
+            var instance: IResource;
 
             instance = Restangular.service('phpcr_repo');
             instance['$get'] = angular.noop;
             instance['changed'] = false;
             instance['pendingUuid'] = null;
+            instance['id'] = null;
 
             return instance;
         }

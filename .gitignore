@@ -1,6 +1,6 @@
 bower_components/
 node_modules/
-typings/
+
 src/services/*.js
 src/services/*.map
 src/*.js
@@ -9,3 +9,5 @@ tests/unit/services/*.js
 tests/unit/services/*.map
 tests/_test_all.js
 tests/_test_all.js.map
+tests/fakeApi/*.js
+tests/fakeApi/*.map

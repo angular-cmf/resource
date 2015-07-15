@@ -1,22 +1,23 @@
 /// <reference path='../_all.ts' />
 
-interface ICacheList {
-    registerResource(resource);
-    getAll(): any[];
-    updateResource(resource);
-    isRegistered(id: string);
-    get(id: string);
-}
-
 module angularCmf.resource {
     'use strict';
+
+    interface ICacheList {
+        registerResource(resource);
+        getAll();
+        updateResource(resource);
+        isRegistered(id: string);
+        get(id: string);
+        getChangedResources();
+    }
 
     export class LocalCacheList implements ICacheList {
 
         /**
          * the list of all registered resources
          */
-        private list: any[] = [];
+        private list: _.Dictionary<angularCmf.resource.IResource> = {};
 
         /**
          * Registers a resource by its id or its pending uuid.
@@ -24,7 +25,7 @@ module angularCmf.resource {
          * @param resource
          */
         registerResource(resource) {
-            if (null === resource.pendingUuid && null !== resource.id) {
+            if (_.isString(resource.id)) {
                 if (!this.isRegistered(resource.id)) {
                     this.list[resource.id] = resource;
 
@@ -32,10 +33,9 @@ module angularCmf.resource {
                 }
 
                 throw  new Error('Problems while registering ' + resource.id + '. It is still registered with its id.');
-            } else if (null !== resource.pendingUuid && null === resource.id) {
+            } else if (null !== resource.pendingUuid) {
                 if (!this.isRegistered(resource.pendingUuid)) {
                     this.list[resource.pendingUuid] = resource;
-
                     return true;
                 }
 
@@ -52,6 +52,22 @@ module angularCmf.resource {
          */
         getAll() {
             return this.list;
+        }
+
+        /**
+         * Return all changed resources
+         *
+         * @returns {TResult[]}
+         */
+        getChangedResources() {
+            var resources = [];
+            _.forEach(this.list, function (resource) {
+                if (resource.changed) {
+                    resources.push(resource);
+                }
+            });
+
+            return resources;
         }
 
         /**
@@ -77,6 +93,16 @@ module angularCmf.resource {
             return null;
         }
 
+        /**
+         * Updates an existing resource.
+         *
+         * Those resources can be found by its pending uuid or its id.
+         * When a resource with a pending uuid should be updated and has a id now, it will be registered with
+         * its id then.
+         *
+         * @param resource
+         * @returns {boolean}
+         */
         updateResource(resource) {
             if (null === resource.pendingUuid && null !== resource.id) {
                 if (this.isRegistered(resource.id)) {
@@ -90,8 +116,14 @@ module angularCmf.resource {
 
                     return true;
                 }
-            }
+            } else if (null !== resource.pendingUuid && null !== resource.id) {
+                if (this.isRegistered(resource.pendingUuid)) {
+                    this.list[resource.id] = resource;
+                    delete this.list[resource.pendingUuid];
 
+                    return true;
+                }
+            }
 
             throw  new Error('Problems while updating resource.');
         }

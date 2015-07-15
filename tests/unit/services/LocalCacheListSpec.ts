@@ -116,6 +116,14 @@ describe('LocalCacheList', function () {
 
                 expect(func).toThrowError('Problems while updating resource.');
             });
+
+            it('should change the resource to an id based registration, when it exists', function () {
+                originResource['id'] = 'some/id';
+                list.updateResource(originResource);
+
+                expect(list.get('some/id').id).toBe('some/id');
+                expect(list.get('some-id')).toBeNull();
+            });
         });
     });
 });

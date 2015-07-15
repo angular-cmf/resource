@@ -27,7 +27,7 @@
     "karma-jasmine": "~0.2.0",
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-story-reporter": "~0.3.1",
-    "tsd": "^0.6.3",
+    "tsd": "^0.6.1",
     "typescript": "^1.5.0-beta",
     "uglify-js": "latest"
   },
@@ -45,8 +45,7 @@
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
 
-    "prebuild:tsc": "tsd update --save --overwrite",
-    "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts",
+    "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts tests/fakeApi/*.ts tests/integration/*.ts",
 
     "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.resource.js",
     "build:scripts:minify": "uglifyjs dist/angularCmf.resource.js > dist/angularCmf.resource.min.js --source-map dist/angularCmf.resource.js.map",

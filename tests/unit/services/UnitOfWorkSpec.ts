@@ -15,7 +15,8 @@ describe('UnitOfWork', function() {
                 'getAll',
                 'updateResource',
                 'isRegistered',
-                'get'
+                'get',
+                'getChangedResources'
             ]);
 
             $provide.value('CmfRestApiPersister', persister);
@@ -42,6 +43,7 @@ describe('UnitOfWork', function() {
             deferred = $q.defer();
             persister.get.and.returnValue(deferred.promise);
             UnitOfWork.find('/some/id').then(function (data) {
+                expect(persister.get).toHaveBeenCalledWith('some/id');
                 expect(cacheList.registerResource).toHaveBeenCalledWith({id: 'some/id', name: 'some name'});
             });
 
@@ -173,10 +175,40 @@ describe('UnitOfWork', function() {
     });
 
     describe('flush resources', function () {
-        var promise;
+        var promise, changedResources;
 
         beforeEach(function () {
+            changedResources = [
+                {id: 'some/id', name: 'some name', changed: true}
+            ];
+            cacheList.getChangedResources.and.returnValue(changedResources);
+            deferred = $q.defer();
+            persister.save.and.returnValue(deferred.promise);
+
             promise = UnitOfWork.flush();
+        });
+
+        it('should ask the cache list for the changed resources', function () {
+            expect(cacheList.getChangedResources).toHaveBeenCalled();
+        });
+
+        it('should pass the changed resources to the persister, to do its work', function () {
+            expect(persister.save).toHaveBeenCalledWith({id: 'some/id', name: 'some name', changed: true});
+        });
+
+        it('should update the saved resource in the local cache list', function () {
+            deferred.resolve({id: 'some/id', name: 'some name', info: 'some additional information'})
+            $rootscope.$digest();
+
+            expect(cacheList.updateResource).toHaveBeenCalledWith({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'});
+        });
+
+        it('should return true for success', function () {
+            promise.then(function (data) {
+                expect(data).toBe(true);
+            });
+            deferred.resolve({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'})
+            $rootscope.$digest();
         });
     })
 });

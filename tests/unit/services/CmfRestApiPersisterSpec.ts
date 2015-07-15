@@ -3,11 +3,13 @@
 describe('CmfRestApiPersister with restangular', function () {
     'use strict';
 
-    var persister, resource, $q, $rootscope;
+    var persister, resource, $q, $rootscope, restangular;
 
     beforeEach(function () {
-        resource = jasmine.createSpyObj('Resource', ['one', 'getList']);
-        persister = new angularCmf.resource.CmfRestApiPersister(resource);
+        resource = jasmine.createSpyObj('Resource', ['one', 'getList', 'post', 'put']);
+        restangular = jasmine.createSpyObj('Restangular', ['clone', 'service']);
+
+        persister = new angularCmf.resource.CmfRestApiPersister(resource, restangular);
 
         inject(function (_$q_, _$rootScope_) {
             $q = _$q_;
@@ -57,10 +59,42 @@ describe('CmfRestApiPersister with restangular', function () {
     });
 
     describe('save a single resource', function () {
+        var promise, deferred, resourceToPersist;
 
+        beforeEach(function () {
+            deferred = $q.defer();
+        });
+
+        describe('post it (pending uuid exists id not)', function () {
+            beforeEach(function () {
+                resource.post.and.returnValue(deferred.promise);
+
+                resourceToPersist = {pendingUuid: 'some uuid', name: 'some name'};
+                promise = persister.save(resourceToPersist);
+            });
+
+            it('should post the resource', function () {
+                expect(resource.post).toHaveBeenCalledWith(resourceToPersist);
+            });
+        });
+
+        describe('put it (id exists so the resource too)', function () {
+            beforeEach(function () {
+                resourceToPersist = jasmine.createSpyObj('ResourceObject', ['put']);
+                resourceToPersist['id'] = 'some/id';
+                resourceToPersist['name'] = 'some name';
+                resourceToPersist.put.and.returnValue(deferred.promise);
+
+                promise = persister.save(resourceToPersist);
+            });
+
+            it('should put the resource', function () {
+                expect(resourceToPersist.put).toHaveBeenCalled();
+            });
+        });
     });
 
-    describe('remove a single resouce', function () {
+    describe('remove a single resource', function () {
 
     });
 
@@ -69,7 +103,6 @@ describe('CmfRestApiPersister with restangular', function () {
 
         beforeEach(function () {
             deferred = $q.defer();
-
             resource.getList.and.returnValue(deferred.promise);
             resourcesList = [
                 {id: 'some/id'},
