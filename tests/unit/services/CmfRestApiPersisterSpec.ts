@@ -3,11 +3,12 @@
 describe('CmfRestApiPersister with restangular', function () {
     'use strict';
 
-    var persister, resource, $q, $rootscope;
+    var persister, resource, $q, $rootscope, restangular;
 
     beforeEach(function () {
         resource = jasmine.createSpyObj('Resource', ['one', 'getList']);
-        persister = new angularCmf.resource.CmfRestApiPersister(resource);
+        restangular = jasmine.createSpyObj('Restangular', ['clone']);
+        persister = new angularCmf.resource.CmfRestApiPersister(resource, restangular);
 
         inject(function (_$q_, _$rootScope_) {
             $q = _$q_;
@@ -57,10 +58,45 @@ describe('CmfRestApiPersister with restangular', function () {
     });
 
     describe('save a single resource', function () {
+        var promise, deferred, restangularResource;
 
+        beforeEach(function () {
+            deferred = $q.defer();
+        });
+
+        describe('post it (pending uuid exists id not)', function () {
+            beforeEach(function () {
+                restangularResource = jasmine.createSpyObj('Resource', ['post']);
+                restangular.clone.and.returnValue(restangularResource);
+                restangularResource.post.and.returnValue(deferred.promise);
+
+                resource = {pendingUuid: 'some uuid', name: 'some name'};
+                promise = persister.save(resource);
+            });
+
+            it('should clone the restangular, to get a new resource', function () {
+                expect(restangular.clone).toHaveBeenCalled();
+            });
+
+            it('should post the resource', function () {
+                expect(restangularResource.post).toHaveBeenCalledWith(resource);
+            });
+        });
+
+        describe('put it (id exists so the resource too)', function () {
+            beforeEach(function () {
+                resource = jasmine.createSpyObj('Resource', ['put']);
+
+                promise = persister.save(resource);
+            });
+
+            it('should put the resource', function () {
+                expect(resource.put).toHaveBeenCalled();
+            })
+        });
     });
 
-    describe('remove a single resouce', function () {
+    describe('remove a single resource', function () {
 
     });
 

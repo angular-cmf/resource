@@ -5,12 +5,21 @@ module angularCmf.resource {
 
     export class CmfRestApiPersister implements PersisterInterface
     {
+        /**
+         * @var angularCmf.resource.Resource
+         */
         private Resource;
 
-        static $inject = ['Resource'];
+        /**
+         * @var restangular.IElement
+         */
+        private Restangular;
 
-        constructor(resource: Resource) {
+        static $inject = ['Resource', 'Restangular'];
+
+        constructor(resource: Resource, restangular: restangular.IElement) {
             this.Resource = resource;
+            this.Restangular = restangular;
         }
 
         get(id: string) {
@@ -18,7 +27,12 @@ module angularCmf.resource {
         }
 
         save(resource) {
-
+            if (_.isUndefined(resource.pendingUuid)) {
+                return resource.put();
+            } else {
+                var restanuglarResource = this.Restangular.clone();
+                return restanuglarResource.post(resource);
+            }
         }
 
         getAll() {

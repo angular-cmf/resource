@@ -121,7 +121,6 @@ module angularCmf.resource {
                 }
             }
 
-
             throw  new Error('Problems while updating resource.');
         }
     }
