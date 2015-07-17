@@ -17,7 +17,7 @@ It provides a client side module for handling cmf resources.
 
 For the install guide and reference, see:
 
-* [Symfony-CMF-Resource(JS) documentation](http://symfony.com/doc/master/cmf/modules/symfony-cmf-resource) (TODO)
+* [Documentation](docs/index.md) (TODO)
 
 See also:
 
