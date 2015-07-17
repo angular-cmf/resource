@@ -9,8 +9,10 @@ module angularCmf.resource {
         updateResource(resource);
         isRegistered(id: string);
         get(id: string);
-        getChangedResources();
-        unregisterResource(resource:IResource):boolean;
+        getChangedResources(): Array<IResource>;
+        getRemovedResources(): Array<IResource>;
+        unregisterResource(resource: IResource): void;
+        removeResource(resource: IResource): boolean;
     }
 
     export class LocalCacheList implements ICacheList {
@@ -60,10 +62,26 @@ module angularCmf.resource {
          *
          * @returns {TResult[]}
          */
-        getChangedResources() {
+        getChangedResources():Array<IResource>  {
+            return this.getResourcesBy('changed', true);
+        }
+
+        getRemovedResources():Array<IResource> {
+            return this.getResourcesBy('removed', true);
+        }
+
+        /**
+         * Fetch a resource by a property and its value.
+         *
+         * @param property
+         * @param value
+         * @returns {Array}
+         */
+        private getResourcesBy(property: string, value: any): Array<IResource> {
             var resources = [];
+
             _.forEach(this.list, function (resource) {
-                if (resource.changed) {
+                if (resource[property] === value) {
                     resources.push(resource);
                 }
             });
@@ -134,13 +152,18 @@ module angularCmf.resource {
          *
          * @param resource
          */
-        unregisterResource(resource:IResource):boolean {
-            if (this.isRegistered(resource.id)) {
-                this.list[resource.id].removed = true;
+        unregisterResource(resource:IResource): void {
+            resource.removed = true;
+            this.updateResource(resource);
+        }
+
+        removeResource(resouce: IResource): boolean {
+            if (this.isRegistered(resouce.id)) {
+                delete this.list[resouce.id];
 
                 return true;
-            } else if (this.isRegistered(resource.pendingUuid)) {
-                this.list[resource.pendingUuid].removed = true;
+            } else if (this.isRegistered(resouce.pendingUuid)) {
+                delete this.list[resouce.pendingUuid];
 
                 return true;
             }
