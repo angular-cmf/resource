@@ -16,7 +16,8 @@ describe('UnitOfWork', function() {
                 'updateResource',
                 'isRegistered',
                 'get',
-                'getChangedResources'
+                'getChangedResources',
+                'unregisterResource'
             ]);
 
             $provide.value('CmfRestApiPersister', persister);
@@ -34,7 +35,7 @@ describe('UnitOfWork', function() {
         expect(UnitOfWork).not.toBeNull();
     });
 
-    describe('find single resource', function () {
+    describe('find single resource', function ()    {
         beforeEach(function () {
 
         });
@@ -210,5 +211,38 @@ describe('UnitOfWork', function() {
             deferred.resolve({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'})
             $rootscope.$digest();
         });
-    })
+    });
+
+    describe('remove a resource', function () {
+        var promise, resource;
+
+        describe('registered by its id', function () {
+            beforeEach(function () {
+                cacheList.unregisterResource.and.returnValue(true);
+                resource = {id: 'some/id'};
+                promise = UnitOfWork.remove(resource);
+            });
+
+            it('should reduce the local cache list', function () {
+                promise.then(function (data) {
+                    expect(cacheList.unregisterResource).toHaveBeenCalledWith(resource);
+                });
+
+                $rootscope.$digest();
+            });
+
+            it('should return the resource with removed property set to true', function () {
+                promise.then(function (data) {
+                    expect(data.removed).toBe(true);
+                });
+
+                $rootscope.$digest();
+            });
+
+        });
+
+        describe('registered by its pending uuid', function () {
+
+        });
+    });
 });

@@ -4,8 +4,9 @@
 module angularCmf.resource {
     export interface IResource {
         changed: boolean;
-        id: number;
+        id: string;
         pendingUuid: string;
+        removed: boolean;
     }
     export class Resource {
         private Restangular;

@@ -10,6 +10,7 @@ module angularCmf.resource {
         isRegistered(id: string);
         get(id: string);
         getChangedResources();
+        unregisterResource(resource:IResource):boolean;
     }
 
     export class LocalCacheList implements ICacheList {
@@ -126,6 +127,25 @@ module angularCmf.resource {
             }
 
             throw  new Error('Problems while updating resource.');
+        }
+
+        /**
+         * To remove a resource from the current list.
+         *
+         * @param resource
+         */
+        unregisterResource(resource:IResource):boolean {
+            if (this.isRegistered(resource.id)) {
+                this.list[resource.id].removed = true;
+
+                return true;
+            } else if (this.isRegistered(resource.pendingUuid)) {
+                this.list[resource.pendingUuid].removed = true;
+
+                return true;
+            }
+
+            return false;
         }
     }
 

@@ -30,9 +30,7 @@ describe('Module working on fake API', function () {
             var failTest = function (error) {
                 expect(error).toBe('undefined');
             };
-            service.find('/foo')
-                .then(testResource)
-                .catch(failTest);
+            service.find('/foo').then(testResource).catch(failTest);
             $rootScope.$digest();
         });
         it('should give an error when the resource does not exists', function () {
@@ -42,10 +40,7 @@ describe('Module working on fake API', function () {
             var failTest = function (error) {
                 expect(error.data.message).toBe("Oops something went wrong.");
             };
-            service
-                .find('/fo')
-                .then(testResourcesList)
-                .catch(failTest);
+            service.find('/fo').then(testResourcesList).catch(failTest);
             $rootScope.$digest();
         });
     });
