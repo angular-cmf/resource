@@ -16,7 +16,10 @@ describe('UnitOfWork', function() {
                 'updateResource',
                 'isRegistered',
                 'get',
-                'getChangedResources'
+                'getChangedResources',
+                'getRemovedResources',
+                'unregisterResource',
+                'removeResource'
             ]);
 
             $provide.value('CmfRestApiPersister', persister);
@@ -34,7 +37,7 @@ describe('UnitOfWork', function() {
         expect(UnitOfWork).not.toBeNull();
     });
 
-    describe('find single resource', function () {
+    describe('find single resource', function ()    {
         beforeEach(function () {
 
         });
@@ -175,40 +178,96 @@ describe('UnitOfWork', function() {
     });
 
     describe('flush resources', function () {
-        var promise, changedResources;
+        var promise, changedResources, removedResources;
+
+        describe('for changed ones',  function () {
+            beforeEach(function () {
+                changedResources = [
+                    {id: 'some/id', name: 'some name', changed: true}
+                ];
+                cacheList.getChangedResources.and.returnValue(changedResources);
+                deferred = $q.defer();
+                persister.save.and.returnValue(deferred.promise);
+
+                promise = UnitOfWork.flush();
+            });
+
+            it('should ask the cache list for the changed resources', function () {
+                expect(cacheList.getChangedResources).toHaveBeenCalled();
+            });
+
+            it('should pass the changed resources to the persister, to do its work', function () {
+                expect(persister.save).toHaveBeenCalledWith({id: 'some/id', name: 'some name', changed: true});
+            });
+
+            it('should update the saved resource in the local cache list', function () {
+                deferred.resolve({id: 'some/id', name: 'some name', info: 'some additional information'});
+                $rootscope.$digest();
+
+                expect(cacheList.updateResource).toHaveBeenCalledWith({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'});
+            });
+
+            it('should return true for success', function () {
+                promise.then(function (data) {
+                    expect(data).toBe(true);
+                });
+                deferred.resolve({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'})
+                $rootscope.$digest();
+            });
+        });
+
+        describe('for removed ones',  function () {
+            beforeEach(function () {
+                removedResources = [
+                    {id: 'some/id', name: 'some name', removed: true}
+                ];
+                cacheList.getRemovedResources.and.returnValue(removedResources);
+                deferred = $q.defer();
+                persister.remove.and.returnValue(deferred.promise);
+
+                promise = UnitOfWork.flush();
+            });
+
+            it('should ask the cache list for the removed resources', function () {
+                expect(cacheList.getRemovedResources).toHaveBeenCalled();
+            });
+
+            it('should remove resources (call persister)', function () {
+                expect(persister.remove).toHaveBeenCalledWith({id: 'some/id', name: 'some name', removed: true});
+            });
+
+            it('should remove the removed resources from the cached list', function () {
+                deferred.resolve(true);
+                $rootscope.$digest();
+
+                expect(cacheList.removeResource).toHaveBeenCalledWith({id: 'some/id', name: 'some name', removed: true});
+            });
+
+            it('should return true for success', function () {
+                promise.then(function (data) {
+                    expect(data).toBe(true);
+                });
+
+                deferred.resolve(true);
+                $rootscope.$digest();
+            })
+        });
+    });
+
+    describe('remove a resource', function () {
+        var promise, resource;
 
         beforeEach(function () {
-            changedResources = [
-                {id: 'some/id', name: 'some name', changed: true}
-            ];
-            cacheList.getChangedResources.and.returnValue(changedResources);
-            deferred = $q.defer();
-            persister.save.and.returnValue(deferred.promise);
-
-            promise = UnitOfWork.flush();
+            resource = {id: 'some/id'};
+            promise = UnitOfWork.remove(resource);
         });
 
-        it('should ask the cache list for the changed resources', function () {
-            expect(cacheList.getChangedResources).toHaveBeenCalled();
-        });
-
-        it('should pass the changed resources to the persister, to do its work', function () {
-            expect(persister.save).toHaveBeenCalledWith({id: 'some/id', name: 'some name', changed: true});
-        });
-
-        it('should update the saved resource in the local cache list', function () {
-            deferred.resolve({id: 'some/id', name: 'some name', info: 'some additional information'})
-            $rootscope.$digest();
-
-            expect(cacheList.updateResource).toHaveBeenCalledWith({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'});
-        });
-
-        it('should return true for success', function () {
+        it('should reduce the local cache list', function () {
             promise.then(function (data) {
-                expect(data).toBe(true);
+                expect(cacheList.unregisterResource).toHaveBeenCalledWith(resource);
             });
-            deferred.resolve({id: 'some/id', name: 'some name', changed: false, info: 'some additional information'})
+
             $rootscope.$digest();
         });
-    })
+    });
 });

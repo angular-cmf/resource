@@ -9,7 +9,10 @@ module angularCmf.resource {
         updateResource(resource);
         isRegistered(id: string);
         get(id: string);
-        getChangedResources();
+        getChangedResources(): Array<IResource>;
+        getRemovedResources(): Array<IResource>;
+        unregisterResource(resource: IResource): boolean;
+        removeResource(resource: IResource): boolean;
     }
 
     export class LocalCacheList implements ICacheList {
@@ -59,10 +62,26 @@ module angularCmf.resource {
          *
          * @returns {TResult[]}
          */
-        getChangedResources() {
+        getChangedResources():Array<IResource>  {
+            return this.getResourcesBy('changed', true);
+        }
+
+        getRemovedResources():Array<IResource> {
+            return this.getResourcesBy('removed', true);
+        }
+
+        /**
+         * Fetch a resource by a property and its value.
+         *
+         * @param property
+         * @param value
+         * @returns {Array}
+         */
+        private getResourcesBy(property: string, value: any): Array<IResource> {
             var resources = [];
+
             _.forEach(this.list, function (resource) {
-                if (resource.changed) {
+                if (resource[property] === value) {
                     resources.push(resource);
                 }
             });
@@ -104,28 +123,58 @@ module angularCmf.resource {
          * @returns {boolean}
          */
         updateResource(resource) {
-            if (null === resource.pendingUuid && null !== resource.id) {
-                if (this.isRegistered(resource.id)) {
-                    _.assign(this.list[resource.id], resource);
-
-                    return true;
-                }
-            } else if (null !== resource.pendingUuid && null === resource.id) {
-                if (this.isRegistered(resource.pendingUuid)) {
-                    _.assign(this.list[resource.pendingUuid], resource);
-
-                    return true;
-                }
-            } else if (null !== resource.pendingUuid && null !== resource.id) {
+            if (null !== resource.pendingUuid && null !== resource.id && typeof resource.pendingUuid !== 'undefined') {
                 if (this.isRegistered(resource.pendingUuid)) {
                     this.list[resource.id] = resource;
                     delete this.list[resource.pendingUuid];
 
                     return true;
                 }
+            } else if (null !== resource.id) {
+                if (this.isRegistered(resource.id)) {
+                    _.assign(this.list[resource.id], resource);
+
+                    return true;
+                }
+            } else if (null !== resource.pendingUuid) {
+                if (this.isRegistered(resource.pendingUuid)) {
+                    _.assign(this.list[resource.pendingUuid], resource);
+
+                    return true;
+                }
             }
 
             throw  new Error('Problems while updating resource.');
+        }
+
+        /**
+         * To remove a resource from the current list.
+         *
+         * @param resource
+         */
+        unregisterResource(resource:IResource): boolean {
+            resource.removed = true;
+            return this.updateResource(resource);
+        }
+
+        /**
+         * Removes a resource from the list of resources.
+         *
+         * @param resouce
+         * @returns {boolean}
+         */
+        removeResource(resouce: IResource): boolean {
+            if (this.isRegistered(resouce.id)) {
+                delete this.list[resouce.id];
+
+                return true;
+            } else if (this.isRegistered(resouce.pendingUuid)) {
+                delete this.list[resouce.pendingUuid];
+
+                return true;
+            }
+
+            return false;
         }
     }
 

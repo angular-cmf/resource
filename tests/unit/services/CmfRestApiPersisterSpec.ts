@@ -6,7 +6,7 @@ describe('CmfRestApiPersister with restangular', function () {
     var persister, resource, $q, $rootscope, restangular;
 
     beforeEach(function () {
-        resource = jasmine.createSpyObj('Resource', ['one', 'getList', 'post', 'put']);
+        resource = jasmine.createSpyObj('Resource', ['one', 'getList', 'post', 'put', 'remove']);
         restangular = jasmine.createSpyObj('Restangular', ['clone', 'service']);
 
         persister = new angularCmf.resource.CmfRestApiPersister(resource, restangular);
@@ -95,7 +95,41 @@ describe('CmfRestApiPersister with restangular', function () {
     });
 
     describe('remove a single resource', function () {
+        var promise, deferred, resourceToRemove;
 
+        beforeEach(function () {
+            deferred = $q.defer();
+        });
+
+        describe('remove it (pending uuid exists id not', function () {
+            beforeEach(function () {
+                resource.remove.and.returnValue(deferred.promise);
+
+                resourceToRemove = {pendingUuid: 'some uuid', name: 'some name', id: null};
+            });
+
+            it('should throw an exception - cause the resource is only local', function () {
+                expect(function () {
+                    persister.remove(resourceToRemove);
+                }).toThrowError(/does not exists/);
+            });
+        });
+
+        describe('remove it (id exists pending uuid not', function () {
+            beforeEach(function () {
+                resourceToRemove = jasmine.createSpyObj('Resource', ['remove']);
+                resourceToRemove.remove.and.returnValue(deferred.promise);
+                resourceToRemove['pendingUuid'] = null;
+                resourceToRemove['name'] = 'some name';
+                resourceToRemove['id'] = 'some/id';
+
+                promise = persister.remove(resourceToRemove);
+            });
+
+            it('should remove the resource at the api', function () {
+                expect(resourceToRemove.remove).toHaveBeenCalled();
+            });
+        });
     });
 
     describe('get all resources', function () {

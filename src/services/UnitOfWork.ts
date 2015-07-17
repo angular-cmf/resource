@@ -58,6 +58,12 @@ module angularCmf.resource {
         remove(resource) {
             var deferred = this.$q.defer();
 
+            if (this.CacheList.unregisterResource(resource)) {
+                deferred.resolve(resource);
+            } else {
+                deferred.reject(new Error('Can\'t unregister the resource.'))
+            }
+
             return deferred.promise;
         }
 
@@ -71,6 +77,12 @@ module angularCmf.resource {
 
                     return this.CacheList.updateResource(resource);
                 }));
+            });
+
+            _.each(this.CacheList.getRemovedResources(), (resource) => {
+               promises.push(this.Persister.remove(resource).then((data) => {
+                   return this.CacheList.removeResource(resource);
+               }));
             });
 
             return this.$q.all(promises).then(() => {return true}, () => {return false});
