@@ -64,6 +64,10 @@ var angularCmf;
                 return this.Resource.getList();
             };
             CmfRestApiPersister.prototype.remove = function (resource) {
+                if (null === resource.id && null !== resource.pendingUuid) {
+                    throw new Error('Can\'t remove the resource at the api - does not exists. (pending uuid set)');
+                }
+                return resource.remove();
             };
             CmfRestApiPersister.$inject = ['Resource', 'Restangular'];
             return CmfRestApiPersister;
@@ -123,9 +127,22 @@ var angularCmf;
              * @returns {TResult[]}
              */
             LocalCacheList.prototype.getChangedResources = function () {
+                return this.getResourcesBy('changed', true);
+            };
+            LocalCacheList.prototype.getRemovedResources = function () {
+                return this.getResourcesBy('removed', true);
+            };
+            /**
+             * Fetch a resource by a property and its value.
+             *
+             * @param property
+             * @param value
+             * @returns {Array}
+             */
+            LocalCacheList.prototype.getResourcesBy = function (property, value) {
                 var resources = [];
                 _.forEach(this.list, function (resource) {
-                    if (resource.changed) {
+                    if (resource[property] === value) {
                         resources.push(resource);
                     }
                 });
@@ -162,26 +179,52 @@ var angularCmf;
              * @returns {boolean}
              */
             LocalCacheList.prototype.updateResource = function (resource) {
-                if (null === resource.pendingUuid && null !== resource.id) {
-                    if (this.isRegistered(resource.id)) {
-                        _.assign(this.list[resource.id], resource);
-                        return true;
-                    }
-                }
-                else if (null !== resource.pendingUuid && null === resource.id) {
-                    if (this.isRegistered(resource.pendingUuid)) {
-                        _.assign(this.list[resource.pendingUuid], resource);
-                        return true;
-                    }
-                }
-                else if (null !== resource.pendingUuid && null !== resource.id) {
+                if (null !== resource.pendingUuid && null !== resource.id && typeof resource.pendingUuid !== 'undefined') {
                     if (this.isRegistered(resource.pendingUuid)) {
                         this.list[resource.id] = resource;
                         delete this.list[resource.pendingUuid];
                         return true;
                     }
                 }
+                else if (null !== resource.id) {
+                    if (this.isRegistered(resource.id)) {
+                        _.assign(this.list[resource.id], resource);
+                        return true;
+                    }
+                }
+                else if (null !== resource.pendingUuid) {
+                    if (this.isRegistered(resource.pendingUuid)) {
+                        _.assign(this.list[resource.pendingUuid], resource);
+                        return true;
+                    }
+                }
                 throw new Error('Problems while updating resource.');
+            };
+            /**
+             * To remove a resource from the current list.
+             *
+             * @param resource
+             */
+            LocalCacheList.prototype.unregisterResource = function (resource) {
+                resource.removed = true;
+                return this.updateResource(resource);
+            };
+            /**
+             * Removes a resource from the list of resources.
+             *
+             * @param resouce
+             * @returns {boolean}
+             */
+            LocalCacheList.prototype.removeResource = function (resouce) {
+                if (this.isRegistered(resouce.id)) {
+                    delete this.list[resouce.id];
+                    return true;
+                }
+                else if (this.isRegistered(resouce.pendingUuid)) {
+                    delete this.list[resouce.pendingUuid];
+                    return true;
+                }
+                return false;
             };
             return LocalCacheList;
         })();
@@ -208,6 +251,7 @@ var angularCmf;
                 instance = Restangular.service('phpcr_repo');
                 instance['$get'] = angular.noop;
                 instance['changed'] = false;
+                instance['removed'] = false;
                 instance['pendingUuid'] = null;
                 instance['id'] = null;
                 return instance;
@@ -267,6 +311,12 @@ var angularCmf;
             };
             UnitOfWork.prototype.remove = function (resource) {
                 var deferred = this.$q.defer();
+                if (this.CacheList.unregisterResource(resource)) {
+                    deferred.resolve(resource);
+                }
+                else {
+                    deferred.reject(new Error('Can\'t unregister the resource.'));
+                }
                 return deferred.promise;
             };
             UnitOfWork.prototype.flush = function () {
@@ -277,6 +327,11 @@ var angularCmf;
                         resource.changed = false;
                         _.assign(resource, data);
                         return _this.CacheList.updateResource(resource);
+                    }));
+                });
+                _.each(this.CacheList.getRemovedResources(), function (resource) {
+                    promises.push(_this.Persister.remove(resource).then(function (data) {
+                        return _this.CacheList.removeResource(resource);
                     }));
                 });
                 return this.$q.all(promises).then(function () { return true; }, function () { return false; });

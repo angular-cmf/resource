@@ -30,7 +30,9 @@ describe('Module working on fake API', function () {
             var failTest = function (error) {
                 expect(error).toBe('undefined');
             };
-            service.find('/foo').then(testResource).catch(failTest);
+            service.find('/foo')
+                .then(testResource)
+                .catch(failTest);
             $rootScope.$digest();
         });
         it('should give an error when the resource does not exists', function () {
@@ -40,7 +42,10 @@ describe('Module working on fake API', function () {
             var failTest = function (error) {
                 expect(error.data.message).toBe("Oops something went wrong.");
             };
-            service.find('/fo').then(testResourcesList).catch(failTest);
+            service
+                .find('/fo')
+                .then(testResourcesList)
+                .catch(failTest);
             $rootScope.$digest();
         });
     });
@@ -89,25 +94,54 @@ describe('Module working on fake API', function () {
         describe('put for an existing resource', function () {
             beforeEach(function () {
                 $http.whenGET('api/phpcr_repo/foo').respond(200, angularCmf.resource.test.HttpContent.truthy_content);
-                service.find('foo').then(function (data) {
-                    data.name = 'some other name';
-                    promise = service.persist(data);
-                });
             });
             it('should return true in success case', function () {
                 $http.whenPUT('api/phpcr_repo/foo').respond(200, angularCmf.resource.test.HttpContent.truthy_content);
-                promise.then(function () {
-                    service.flush().then(function (data) {
-                        expect(data).toBe(true);
+                service.find('foo').then(function (data) {
+                    data.name = 'some other name';
+                    service.persist(data).then(function (data) {
+                        service.flush().then(function (data) {
+                            expect(data).toBe(true);
+                        });
                     });
                 });
                 $rootScope.$digest();
             });
             it('should return false in error case', function () {
                 $http.whenPUT('api/phpcr_repo/foo').respond(500, {});
-                promise.then(function () {
-                    service.flush().then(function (data) {
-                        expect(data).toBe(false);
+                service.find('foo').then(function (data) {
+                    data.name = 'some other name';
+                    service.persist(data).then(function (data) {
+                        service.flush().then(function (data) {
+                            expect(data).toBe(false);
+                        });
+                    });
+                });
+                $rootScope.$digest();
+            });
+        });
+        describe('remove for removeable resources', function () {
+            beforeEach(function () {
+                $http.whenGET('api/phpcr_repo/foo').respond(200, angularCmf.resource.test.HttpContent.truthy_content);
+            });
+            it('should just do it when api likes it', function () {
+                $http.whenDELETE('api/phpcr_repo/foo').respond(204);
+                service.find('foo').then(function (data) {
+                    service.remove(data).then(function (data) {
+                        service.flush().then(function (data) {
+                            expect(data).toBe(true);
+                        });
+                    });
+                });
+                $rootScope.$digest();
+            });
+            it('should just do it when api does not likes it', function () {
+                $http.whenDELETE('api/phpcr_repo/foo').respond(404);
+                service.find('foo').then(function (data) {
+                    service.remove(data).then(function (data) {
+                        service.flush().then(function (data) {
+                            expect(data).toBe(false);
+                        });
                     });
                 });
                 $rootScope.$digest();
@@ -115,4 +149,3 @@ describe('Module working on fake API', function () {
         });
     });
 });
-//# sourceMappingURL=ResourceServiceSpec.js.map

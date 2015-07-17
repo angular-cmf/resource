@@ -117,14 +117,17 @@ describe('CmfRestApiPersister with restangular', function () {
 
         describe('remove it (id exists pending uuid not', function () {
             beforeEach(function () {
-                resource.remove.and.returnValue(deferred.promise);
+                resourceToRemove = jasmine.createSpyObj('Resource', ['remove']);
+                resourceToRemove.remove.and.returnValue(deferred.promise);
+                resourceToRemove['pendingUuid'] = null;
+                resourceToRemove['name'] = 'some name';
+                resourceToRemove['id'] = 'some/id';
 
-                resourceToRemove = {pendingUuid: null, name: 'some name', id: 'some/id'};
                 promise = persister.remove(resourceToRemove);
             });
 
             it('should remove the resource at the api', function () {
-                expect(resource.remove).toHaveBeenCalledWith(resourceToRemove);
+                expect(resourceToRemove.remove).toHaveBeenCalled();
             });
         });
     });

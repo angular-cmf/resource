@@ -43,7 +43,7 @@ module angularCmf.resource {
                 throw new Error('Can\'t remove the resource at the api - does not exists. (pending uuid set)');
             }
 
-            return this.Resource.remove(resource);
+            return resource.remove();
         }
     }
 

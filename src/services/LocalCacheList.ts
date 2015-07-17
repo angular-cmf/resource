@@ -11,7 +11,7 @@ module angularCmf.resource {
         get(id: string);
         getChangedResources(): Array<IResource>;
         getRemovedResources(): Array<IResource>;
-        unregisterResource(resource: IResource): void;
+        unregisterResource(resource: IResource): boolean;
         removeResource(resource: IResource): boolean;
     }
 
@@ -123,7 +123,7 @@ module angularCmf.resource {
          * @returns {boolean}
          */
         updateResource(resource) {
-            if (null !== resource.pendingUuid && null !== resource.id) {
+            if (null !== resource.pendingUuid && null !== resource.id && typeof resource.pendingUuid !== 'undefined') {
                 if (this.isRegistered(resource.pendingUuid)) {
                     this.list[resource.id] = resource;
                     delete this.list[resource.pendingUuid];
@@ -152,9 +152,9 @@ module angularCmf.resource {
          *
          * @param resource
          */
-        unregisterResource(resource:IResource): void {
+        unregisterResource(resource:IResource): boolean {
             resource.removed = true;
-            this.updateResource(resource);
+            return this.updateResource(resource);
         }
 
         /**

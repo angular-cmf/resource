@@ -58,8 +58,11 @@ module angularCmf.resource {
         remove(resource) {
             var deferred = this.$q.defer();
 
-            this.CacheList.unregisterResource(resource);
-            deferred.resolve(resource);
+            if (this.CacheList.unregisterResource(resource)) {
+                deferred.resolve(resource);
+            } else {
+                deferred.reject(new Error('Can\'t unregister the resource.'))
+            }
 
             return deferred.promise;
         }
