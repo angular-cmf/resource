@@ -47,7 +47,15 @@ TBD. with the persister settings.
 
 To use that library you will have to insert it into you frontend project like
 
-``` html 
+``` html
+ 
+<!-- some dependencies -->
+<script type="application/javascript" src="lib/resource/bower_components/angular/angular.min.js"></script>
+<script type="application/javascript" src="lib/resource/bower_components/angular-mocks/angular-mocks.js"></script>
+<script type="application/javascript" src="lib/resource/bower_components/restangular/dist/restangular.min.js"></script>
+<script type="application/javascript" src="lib/resource/bower_components/lodash/dist/lodash.min.js"></script>
+
+<!-- use the lib -->
 <script type="application/javascript" src="lib/angular-cmf/resource/dist/angularCmf.resource.min.js"></script>
 ```
 
