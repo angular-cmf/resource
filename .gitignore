@@ -11,3 +11,5 @@ tests/_test_all.js
 tests/_test_all.js.map
 tests/fakeApi/*.js
 tests/fakeApi/*.map
+tests/integration/*.js
+tests/integration/*.map

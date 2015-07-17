@@ -3,9 +3,12 @@
 /// <reference path='../typings/angularjs/angular.d.ts' />
 /// <reference path='../typings/restangular/restangular.d.ts' />
 /// <reference path='services/LocalCacheList.ts' />
-/// <reference path='services/CmfRestApiPersister.ts' />
+/// <reference path='services/PhpcrRestApiPersister.ts' />
 /// <reference path='services/PersisterInterface.ts' />
-/// <reference path='services/Resource.ts' />
+/// <reference path='services/PhpcrRepoResource.ts' />
+/// <reference path='services/IResource.ts' />
+/// <reference path='services/IPhpcrOdmResource.ts' />
+/// <reference path='services/IPhpcrResource.ts' />
 /// <reference path='services/UnitOfWorkInterface.ts' />
 /// <reference path='services/UnitOfWork.ts' />
 /// <reference path='app.config.ts' />
@@ -39,45 +42,12 @@ var angularCmf;
 
 },{}],4:[function(require,module,exports){
 /// <reference path='../_all.ts' />
-var angularCmf;
-(function (angularCmf) {
-    var resource;
-    (function (resource_1) {
-        'use strict';
-        var CmfRestApiPersister = (function () {
-            function CmfRestApiPersister(resource, restangular) {
-                this.Resource = resource;
-                this.Restangular = restangular;
-            }
-            CmfRestApiPersister.prototype.get = function (id) {
-                return this.Resource.one(id).get();
-            };
-            CmfRestApiPersister.prototype.save = function (resource) {
-                if (!_.isUndefined(resource.id)) {
-                    return resource.put();
-                }
-                else {
-                    return this.Resource.post(resource);
-                }
-            };
-            CmfRestApiPersister.prototype.getAll = function () {
-                return this.Resource.getList();
-            };
-            CmfRestApiPersister.prototype.remove = function (resource) {
-                if (null === resource.id && null !== resource.pendingUuid) {
-                    throw new Error('Can\'t remove the resource at the api - does not exists. (pending uuid set)');
-                }
-                return resource.remove();
-            };
-            CmfRestApiPersister.$inject = ['Resource', 'Restangular'];
-            return CmfRestApiPersister;
-        })();
-        resource_1.CmfRestApiPersister = CmfRestApiPersister;
-        angular.module('angularCmf').service('CmfRestApiPersister', CmfRestApiPersister);
-    })(resource = angularCmf.resource || (angularCmf.resource = {}));
-})(angularCmf || (angularCmf = {}));
 
 },{}],5:[function(require,module,exports){
+module.exports=require(4)
+},{"/home/maximilian/OpenSource/Cmf/angular-cmf-resource/src/services/IPhpcrOdmResource.js":4}],6:[function(require,module,exports){
+module.exports=require(4)
+},{"/home/maximilian/OpenSource/Cmf/angular-cmf-resource/src/services/IPhpcrOdmResource.js":4}],7:[function(require,module,exports){
 /// <reference path='../_all.ts' />
 var angularCmf;
 (function (angularCmf) {
@@ -233,20 +203,19 @@ var angularCmf;
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));
 
-},{}],6:[function(require,module,exports){
-/// <reference path='../_all.ts' />
-
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+module.exports=require(4)
+},{"/home/maximilian/OpenSource/Cmf/angular-cmf-resource/src/services/IPhpcrOdmResource.js":4}],9:[function(require,module,exports){
 /// <reference path='../_all.ts' />
 var angularCmf;
 (function (angularCmf) {
     var resource;
     (function (resource) {
-        var Resource = (function () {
-            function Resource(Restangular) {
+        var PhpcrRepoResource = (function () {
+            function PhpcrRepoResource(Restangular) {
                 this.Restangular = Restangular;
             }
-            Resource.instance = function (Restangular) {
+            PhpcrRepoResource.instance = function (Restangular) {
                 var instance;
                 instance = Restangular.service('phpcr_repo');
                 instance['$get'] = angular.noop;
@@ -256,15 +225,55 @@ var angularCmf;
                 instance['id'] = null;
                 return instance;
             };
-            Resource.$inject = ['Restangular'];
-            return Resource;
+            PhpcrRepoResource.$inject = ['Restangular'];
+            return PhpcrRepoResource;
         })();
-        resource.Resource = Resource;
-        angular.module('angularCmf').factory('Resource', Resource.instance);
+        resource.PhpcrRepoResource = PhpcrRepoResource;
+        angular.module('angularCmf').factory('PhpcrRepoResource', PhpcrRepoResource.instance);
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+/// <reference path='../_all.ts' />
+var angularCmf;
+(function (angularCmf) {
+    var resource;
+    (function (resource_1) {
+        'use strict';
+        var PhpcrRestApiPersister = (function () {
+            function PhpcrRestApiPersister(resource, restangular) {
+                this.Resource = resource;
+                this.Restangular = restangular;
+            }
+            PhpcrRestApiPersister.prototype.get = function (id) {
+                return this.Resource.one(id).get();
+            };
+            PhpcrRestApiPersister.prototype.save = function (resource) {
+                if (!_.isUndefined(resource.id)) {
+                    return resource.put();
+                }
+                else {
+                    return this.Resource.post(resource);
+                }
+            };
+            PhpcrRestApiPersister.prototype.getAll = function () {
+                return this.Resource.getList();
+            };
+            PhpcrRestApiPersister.prototype.remove = function (resource) {
+                if (null === resource.id && null !== resource.pendingUuid) {
+                    throw new Error('Can\'t remove the resource at the api - does not exists. (pending uuid set)');
+                }
+                return resource.remove();
+            };
+            PhpcrRestApiPersister.$inject = ['PhpcrRepoResource', 'Restangular'];
+            return PhpcrRestApiPersister;
+        })();
+        resource_1.PhpcrRestApiPersister = PhpcrRestApiPersister;
+        angular.module('angularCmf').service('PhpcrRestApiPersister', PhpcrRestApiPersister);
+    })(resource = angularCmf.resource || (angularCmf.resource = {}));
+})(angularCmf || (angularCmf = {}));
+
+},{}],11:[function(require,module,exports){
 /// <reference path='../_all.ts' />
 var angularCmf;
 (function (angularCmf) {
@@ -360,14 +369,14 @@ var angularCmf;
                 return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                     s4() + '-' + s4() + s4() + s4();
             };
-            UnitOfWork.$inject = ['CmfRestApiPersister', 'LocalCacheList', '$q'];
+            UnitOfWork.$inject = ['PhpcrRestApiPersister', 'LocalCacheList', '$q'];
             return UnitOfWork;
         })();
         angular.module('angularCmf').service('UnitOfWork', UnitOfWork);
     })(resource = angularCmf.resource || (angularCmf.resource = {}));
 })(angularCmf || (angularCmf = {}));
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /// <resource path='../_all.ts' />
 
-},{}]},{},[1,2,3,4,5,6,7,8,9]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);

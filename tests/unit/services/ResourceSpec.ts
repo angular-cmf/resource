@@ -1,6 +1,6 @@
 /// <reference path='../../_test_all.ts' />
 
-describe('Resource', function() {
+describe('PhpcrRepoResource', function() {
     'use strict';
     var Resource, Restangular;
 
@@ -11,7 +11,7 @@ describe('Resource', function() {
         Restangular.service.and.returnValue({});
 
         inject(function ($injector) {
-            Resource = $injector.get('Resource');
+            Resource = $injector.get('PhpcrRepoResource');
         });
     });
 

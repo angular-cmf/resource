@@ -8,7 +8,7 @@ module angularCmf.resource {
         private CacheList: LocalCacheList;
         private $q;
 
-        static $inject = ['CmfRestApiPersister', 'LocalCacheList', '$q'];
+        static $inject = ['PhpcrRestApiPersister', 'LocalCacheList', '$q'];
 
         constructor(persister: PersisterInterface, cacheList: LocalCacheList, $q) {
             this.Persister = persister;

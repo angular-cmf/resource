@@ -3,9 +3,12 @@
 /// <reference path='../typings/restangular/restangular.d.ts' />
 
 /// <reference path='services/LocalCacheList.ts' />
-/// <reference path='services/CmfRestApiPersister.ts' />
+/// <reference path='services/PhpcrRestApiPersister.ts' />
 /// <reference path='services/PersisterInterface.ts' />
-/// <reference path='services/Resource.ts' />
+/// <reference path='services/PhpcrRepoResource.ts' />
+/// <reference path='services/IResource.ts' />
+/// <reference path='services/IPhpcrOdmResource.ts' />
+/// <reference path='services/IPhpcrResource.ts' />
 /// <reference path='services/UnitOfWorkInterface.ts' />
 /// <reference path='services/UnitOfWork.ts' />
 /// <reference path='app.config.ts' />
