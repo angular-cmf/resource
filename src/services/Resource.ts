@@ -24,6 +24,7 @@ module angularCmf.resource {
             instance = Restangular.service('phpcr_repo');
             instance['$get'] = angular.noop;
             instance['changed'] = false;
+            instance['removed'] = false;
             instance['pendingUuid'] = null;
             instance['id'] = null;
 

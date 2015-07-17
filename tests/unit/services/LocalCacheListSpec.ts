@@ -35,7 +35,9 @@ describe('LocalCacheList', function () {
                 list.registerResource(resource);
 
                 // second registrations
-                expect(function () {list.registerResource(resource);}).toThrowError(/some\/id/)
+                expect(function () {
+                    list.registerResource(resource);
+                }).toThrowError(/some\/id/)
             });
         });
 
@@ -61,7 +63,9 @@ describe('LocalCacheList', function () {
                 list.registerResource(resource);
 
                 // second registrations
-                expect(function () {list.registerResource(resource);}).toThrowError(/some-uuid/)
+                expect(function () {
+                    list.registerResource(resource);
+                }).toThrowError(/some-uuid/)
             });
         });
     });
@@ -88,9 +92,9 @@ describe('LocalCacheList', function () {
             });
 
             it('should throw an exception for non existing resource', function () {
-               var func = function () {
-                   list.updateResource({id: 'some-other/id'});
-               };
+                var func = function () {
+                    list.updateResource({id: 'some-other/id'});
+                };
 
                 expect(func).toThrowError('Problems while updating resource.');
             });
@@ -124,6 +128,48 @@ describe('LocalCacheList', function () {
                 expect(list.get('some/id').id).toBe('some/id');
                 expect(list.get('some-id')).toBeNull();
             });
+        });
+    });
+
+    describe('unregister a resource', function () {
+        var resourceWithId, resourceWithUuid;
+
+        beforeEach(function () {
+            resourceWithId = {id: 'some/id', pendingUuid: null};
+            resourceWithUuid = {id: null, pendingUuid: 'some-uuid'};
+            list.registerResource(resourceWithId);
+            list.registerResource(resourceWithUuid);
+        });
+
+        it('should set the removed property to true (id set)', function () {
+            list.unregisterResource(resourceWithId);
+            expect(resourceWithId.removed).toBe(true);
+        });
+
+        it('should set the removed property to true (uuid set)', function () {
+            list.unregisterResource(resourceWithUuid);
+            expect(resourceWithUuid.removed).toBe(true);
+        });
+    });
+
+    describe('remove resource from list', function () {
+        var resourceWithId, resourceWithUuid;
+
+        beforeEach(function () {
+            resourceWithId = {id: 'some/id', pendingUuid: null};
+            resourceWithUuid = {id: null, pendingUuid: 'some-uuid'};
+            list.registerResource(resourceWithId);
+            list.registerResource(resourceWithUuid);
+        });
+
+        it('should remove the resource with an id', function () {
+            list.removeResource(resourceWithId);
+            expect(_.size(list.getAll())).toBe(1);
+        });
+
+        it('should remove the resource with an uuid', function () {
+            list.removeResource(resourceWithUuid);
+            expect(_.size(list.getAll())).toBe(1);
         });
     });
 });

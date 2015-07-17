@@ -123,22 +123,22 @@ module angularCmf.resource {
          * @returns {boolean}
          */
         updateResource(resource) {
-            if (null === resource.pendingUuid && null !== resource.id) {
+            if (null !== resource.pendingUuid && null !== resource.id) {
+                if (this.isRegistered(resource.pendingUuid)) {
+                    this.list[resource.id] = resource;
+                    delete this.list[resource.pendingUuid];
+
+                    return true;
+                }
+            } else if (null !== resource.id) {
                 if (this.isRegistered(resource.id)) {
                     _.assign(this.list[resource.id], resource);
 
                     return true;
                 }
-            } else if (null !== resource.pendingUuid && null === resource.id) {
+            } else if (null !== resource.pendingUuid) {
                 if (this.isRegistered(resource.pendingUuid)) {
                     _.assign(this.list[resource.pendingUuid], resource);
-
-                    return true;
-                }
-            } else if (null !== resource.pendingUuid && null !== resource.id) {
-                if (this.isRegistered(resource.pendingUuid)) {
-                    this.list[resource.id] = resource;
-                    delete this.list[resource.pendingUuid];
 
                     return true;
                 }
@@ -157,6 +157,12 @@ module angularCmf.resource {
             this.updateResource(resource);
         }
 
+        /**
+         * Removes a resource from the list of resources.
+         *
+         * @param resouce
+         * @returns {boolean}
+         */
         removeResource(resouce: IResource): boolean {
             if (this.isRegistered(resouce.id)) {
                 delete this.list[resouce.id];
