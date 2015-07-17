@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/angular-cmf/resource.svg)](https://travis-ci.org/angular-cmf/resource)
 
 This module is part of the [Symfony Content Management Framework (CMF)](http://cmf.symfony.com/)
-and licensed under the [MIT License](LICENSE).
+and licensed under the [MIT License](LICENSE.md).
 
 It provides a client side module for handling cmf resources.
 
