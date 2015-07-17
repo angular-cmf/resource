@@ -17,7 +17,7 @@ It provides a client side module for handling cmf resources.
 
 For the install guide and reference, see:
 
-* [Documentation](docs/index.md) (TODO)
+* [Documentation](docs/index.md)
 
 See also:
 
