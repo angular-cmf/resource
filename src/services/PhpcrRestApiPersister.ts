@@ -3,10 +3,10 @@
 module angularCmf.resource {
     'use strict';
 
-    export class CmfRestApiPersister implements PersisterInterface
+    export class PhpcrRestApiPersister implements PersisterInterface
     {
         /**
-         * @var angularCmf.resource.Resource
+         * @var angularCmf.resource.PhpcrRepoResource
          */
         private Resource;
 
@@ -15,9 +15,9 @@ module angularCmf.resource {
          */
         private Restangular;
 
-        static $inject = ['Resource', 'Restangular'];
+        static $inject = ['PhpcrRepoResource', 'Restangular'];
 
-        constructor(resource: Resource, restangular: restangular.IElement) {
+        constructor(resource: PhpcrRepoResource, restangular: restangular.IElement) {
             this.Resource = resource;
             this.Restangular = restangular;
         }
@@ -47,5 +47,5 @@ module angularCmf.resource {
         }
     }
 
-    angular.module('angularCmf').service('CmfRestApiPersister', CmfRestApiPersister)
+    angular.module('angularCmf').service('PhpcrRestApiPersister', PhpcrRestApiPersister)
 }

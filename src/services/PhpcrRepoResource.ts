@@ -1,14 +1,8 @@
 /// <reference path='../_all.ts' />
 
-
 module angularCmf.resource {
-    export interface IResource {
-        changed: boolean;
-        id: string;
-        pendingUuid: string;
-        removed: boolean;
-    }
-    export class Resource {
+
+    export class PhpcrRepoResource {
         private Restangular;
 
         static $inject = ['Restangular'];
@@ -19,7 +13,7 @@ module angularCmf.resource {
         }
 
         static instance(Restangular) {
-            var instance: IResource;
+            var instance: IPhpcrResource;
 
             instance = Restangular.service('phpcr_repo');
             instance['$get'] = angular.noop;
@@ -32,5 +26,5 @@ module angularCmf.resource {
         }
     }
 
-    angular.module('angularCmf').factory('Resource', Resource.instance);
+    angular.module('angularCmf').factory('PhpcrRepoResource', PhpcrRepoResource.instance);
 }

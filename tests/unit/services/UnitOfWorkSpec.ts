@@ -22,7 +22,7 @@ describe('UnitOfWork', function() {
                 'removeResource'
             ]);
 
-            $provide.value('CmfRestApiPersister', persister);
+            $provide.value('PhpcrRestApiPersister', persister);
             $provide.value('LocalCacheList', cacheList);
         });
 

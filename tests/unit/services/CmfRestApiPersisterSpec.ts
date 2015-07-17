@@ -1,15 +1,15 @@
 /// <reference path='../../_test_all.ts' />
 
-describe('CmfRestApiPersister with restangular', function () {
+describe('PhpcrRestApiPersister with restangular', function () {
     'use strict';
 
     var persister, resource, $q, $rootscope, restangular;
 
     beforeEach(function () {
-        resource = jasmine.createSpyObj('Resource', ['one', 'getList', 'post', 'put', 'remove']);
+        resource = jasmine.createSpyObj('PhpcrRepoResource', ['one', 'getList', 'post', 'put', 'remove']);
         restangular = jasmine.createSpyObj('Restangular', ['clone', 'service']);
 
-        persister = new angularCmf.resource.CmfRestApiPersister(resource, restangular);
+        persister = new angularCmf.resource.PhpcrRestApiPersister(resource, restangular);
 
         inject(function (_$q_, _$rootScope_) {
             $q = _$q_;
@@ -117,7 +117,7 @@ describe('CmfRestApiPersister with restangular', function () {
 
         describe('remove it (id exists pending uuid not', function () {
             beforeEach(function () {
-                resourceToRemove = jasmine.createSpyObj('Resource', ['remove']);
+                resourceToRemove = jasmine.createSpyObj('PhpcrRepoResource', ['remove']);
                 resourceToRemove.remove.and.returnValue(deferred.promise);
                 resourceToRemove['pendingUuid'] = null;
                 resourceToRemove['name'] = 'some name';
