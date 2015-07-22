@@ -9,6 +9,6 @@
 /// <reference path='services/IResource.ts' />
 /// <reference path='services/IPhpcrOdmResource.ts' />
 /// <reference path='services/IPhpcrResource.ts' />
-/// <reference path='services/UnitOfWorkInterface.ts' />
 /// <reference path='services/UnitOfWork.ts' />
+/// <reference path='services/PersisterChain.ts' />
 /// <reference path='app.config.ts' />

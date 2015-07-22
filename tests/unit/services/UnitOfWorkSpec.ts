@@ -46,7 +46,7 @@ describe('UnitOfWork', function() {
             deferred = $q.defer();
             persister.get.and.returnValue(deferred.promise);
             UnitOfWork.find('/some/id').then(function (data) {
-                expect(persister.get).toHaveBeenCalledWith('some/id');
+                expect(persister.get).toHaveBeenCalledWith('some/id', 'repo_phpcr');
                 expect(cacheList.registerResource).toHaveBeenCalledWith({id: 'some/id', name: 'some name'});
             });
 

@@ -3,7 +3,15 @@
 module angularCmf.resource {
     'use strict';
 
-    class UnitOfWork implements UnitOfWorkInterface {
+    export interface UnitOfWorkInterface {
+        find(id: string);
+        persist(resource);
+        findAll();
+        remove(resouce);
+        flush();
+    }
+
+    export class UnitOfWork implements UnitOfWorkInterface {
         private Persister: PersisterInterface;
         private CacheList: LocalCacheList;
         private $q;
@@ -32,7 +40,7 @@ module angularCmf.resource {
             }
 
             // get a fresh resource from the persister
-            return this.Persister.get(cleanId).then((resource) => {
+            return this.Persister.get(cleanId, 'repo_phpcr').then((resource) => {
                 this.CacheList.registerResource(resource);
 
                 return resource;
@@ -89,7 +97,7 @@ module angularCmf.resource {
         }
 
         findAll() {
-            return this.Persister.getAll().then((resourceList) => {
+            return this.Persister.getAll('repo_phpcr').then((resourceList) => {
                 _.each(resourceList, (resource) => {
                     this.CacheList.updateResource(resource);
                 });
