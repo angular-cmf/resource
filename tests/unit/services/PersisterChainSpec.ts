@@ -13,7 +13,7 @@ describe('PersisterChainSpec', function () {
         persisterFalse.supports.and.returnValue(false);
         persisterTrue.supports.and.returnValue(true);
 
-        chainProvider = new angularCmf.resource.PersisterChain();
+        chainProvider = new angularCmf.resource.persisterChain();
 
         chainProvider.addPersister(persisterTrue);
         chainProvider.addPersister(persisterFalse);

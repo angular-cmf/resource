@@ -1,7 +1,7 @@
 /// <reference path='../_all.ts' />
 
 module angularCmf.resource {
-    export class PersisterChain implements ng.IServiceProvider {
+    export class persisterChain implements ng.IServiceProvider {
         'use strict';
 
         private list: Array<TypeAwarePersisterInterface> = [];
@@ -48,5 +48,5 @@ module angularCmf.resource {
         }
     }
 
-    angular.module('angularCmf').provider('PersisterChain', PersisterChain);
+    angular.module('angularCmf').provider('persisterChain', persisterChain);
 }

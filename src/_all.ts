@@ -11,4 +11,3 @@
 /// <reference path='services/IPhpcrResource.ts' />
 /// <reference path='services/UnitOfWork.ts' />
 /// <reference path='services/PersisterChain.ts' />
-/// <reference path='app.config.ts' />
