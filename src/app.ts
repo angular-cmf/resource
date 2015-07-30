@@ -18,8 +18,7 @@ module angularCmf.resource {
         })
         .config([
             'persisterChainProvider',
-            'PhpcrRestApiPersister',
-            function (persisterChainProvider: angularCmf.resource.persisterChain, PhpcrRestApiPersister) {
-                persisterChainProvider.addPersister(PhpcrRestApiPersister);
+            function (persisterChainProvider: angularCmf.resource.persisterChain) {
+                persisterChainProvider.addPersisterById('PhpcrRestApiPersister');
             }]);
 }

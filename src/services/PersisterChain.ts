@@ -4,13 +4,25 @@ module angularCmf.resource {
     export class persisterChain implements ng.IServiceProvider {
         'use strict';
 
+        private listIds: Array <string> = [];
         private list: Array<TypeAwarePersisterInterface> = [];
+        private injector;
 
-        public addPersister(persister: TypeAwarePersisterInterface) {
-            this.list.push(persister);
+        public $inject = ['$provide'];
+
+        constructor ($injector) {
+            this.injector = $injector;
+        }
+
+        public addPersisterById(persisterId) {
+            this.listIds.push(persisterId);
         }
 
         public $get(): PersisterInterface {
+            _.each(this.listIds, (id) => {
+                this.list.push(this.injector.get(id));
+            });
+
             return {
                 get: (id: string, type: string) => {
                     var result = _.each(this.list, (persister: TypeAwarePersisterInterface) => {

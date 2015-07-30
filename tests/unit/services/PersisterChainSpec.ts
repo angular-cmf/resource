@@ -3,20 +3,25 @@
 describe('PersisterChainSpec', function () {
     'use strict';
 
-    var chainProvider, chain, persisterTrue, persisterFalse;
+    var chainProvider, chain, persisterTrue, persisterFalse, injector;
 
     beforeEach(module('angularCmf'));
 
     beforeEach(function() {
         persisterTrue = jasmine.createSpyObj('PersisterTrue', ['get', 'save', 'remove', 'getAll', 'supports']);
         persisterFalse = jasmine.createSpyObj('PersisterFalse', ['get', 'save', 'remove', 'getAll', 'supports']);
+        injector = jasmine.createSpyObj('injector', ['get']);
         persisterFalse.supports.and.returnValue(false);
         persisterTrue.supports.and.returnValue(true);
 
-        chainProvider = new angularCmf.resource.persisterChain();
+        chainProvider = new angularCmf.resource.persisterChain(injector);
 
-        chainProvider.addPersister(persisterTrue);
-        chainProvider.addPersister(persisterFalse);
+        chainProvider.addPersisterById('PersisterTrue');
+        chainProvider.addPersisterById('PersisterFalse');
+
+        injector.get.and.callFake(function (id) {
+           return  id === 'PersisterFalse' ? persisterFalse : persisterTrue;
+        });
 
         chain = chainProvider.$get();
     });
