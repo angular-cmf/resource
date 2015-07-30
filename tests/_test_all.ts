@@ -10,4 +10,4 @@
 /// <reference path='../src/services/IPhpcrResource.ts' />
 /// <resource path='../src/services/LocalCacheList.ts' />
 /// <resource path='../src/services/UnitOfWork.ts' />
-/// <resource path='../src/services/UnitOfWorkInterface.ts' />
+/// <reference path='../src/services/PersisterChain.ts' />

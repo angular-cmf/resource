@@ -10,9 +10,15 @@
 module angularCmf.resource {
     'use strict';
 
-    var resourceLibrary = angular
-        .module(
-            'angularCmf',
-            ['angularCmf.config']
-        );
+    angular
+        .module('angularCmf', ['restangular'])
+        .config(function(RestangularProvider) {
+            RestangularProvider.setEncodeIds(false);
+            RestangularProvider.setBaseUrl('api');
+        })
+        .config([
+            'persisterChainProvider',
+            function (persisterChainProvider: angularCmf.resource.persisterChain) {
+                persisterChainProvider.addPersisterById('PhpcrRestApiPersister');
+            }]);
 }

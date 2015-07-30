@@ -6,5 +6,6 @@ module angularCmf.resource {
         id: string;
         pendingUuid: string;
         removed: boolean;
+        type: string;
     }
 }

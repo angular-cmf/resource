@@ -3,8 +3,18 @@
 module angularCmf.resource {
     'use strict';
 
-    export class PhpcrRestApiPersister implements PersisterInterface
+    export class PhpcrRestApiPersister implements TypeAwarePersisterInterface
     {
+        /**
+         * Decides whether the persister is responsible for a given type or not.
+         *
+         * @param type
+         * @returns {boolean}
+         */
+        supports(type: string): boolean {
+            return 'repo_phpcr' === type;
+        }
+
         /**
          * @var angularCmf.resource.PhpcrRepoResource
          */

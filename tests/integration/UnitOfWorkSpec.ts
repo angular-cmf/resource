@@ -7,13 +7,13 @@ describe('Module working on fake API', function () {
     beforeEach(function () {
         module('angularCmf');
 
+        debugger;
         inject(function (_UnitOfWork_, $httpBackend, _$rootScope_) {
             service = _UnitOfWork_;
             $http = $httpBackend;
             $rootScope = _$rootScope_;
         });
     });
-
 
     afterEach(function () {
         try {

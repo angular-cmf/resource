@@ -45,7 +45,7 @@
     "pretest:ci": "npm install && npm run lint",
     "test:ci": "karma start tests/karma.conf.js --reporters progress,story --browsers $npm_package_config_browsers --single-run",
 
-    "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts tests/fakeApi/*.ts tests/integration/*.ts",
+    "build:tsc": "tsc -m commonjs -t es5 --emitDecoratorMetadata --experimentalDecorators src/*.ts src/services/*.ts tests/unit/services/*.ts tests/*.ts tests/fakeApi/*.ts tests/integration/*.ts",
 
     "build:scripts:concatenate": "browserify src/*.js src/services/*.js > dist/angularCmf.resource.js",
     "build:scripts:minify": "uglifyjs dist/angularCmf.resource.js > dist/angularCmf.resource.min.js --source-map dist/angularCmf.resource.js.map",
